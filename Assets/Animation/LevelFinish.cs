@@ -18,6 +18,9 @@ public class LevelFinish : MonoBehaviour
 
         finished = true;
 
+        if (RaceModeManager.TryFinishActiveRace())
+            return;
+
         if (DeathMenuUI.PracticeModeActive)
         {
             DeathMenuUI.DisablePracticeMode();

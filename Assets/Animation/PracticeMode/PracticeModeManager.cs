@@ -72,6 +72,8 @@ public class PracticeModeManager : MonoBehaviour
 
     [Header("Temporary Gravity Bonus")]
     public bool forceNormalGravityAfterTemporaryBonus = true;
+    public bool saveActualGravityAfterTemporaryBonus = true;
+    public bool useGravityRelativeCheckpointOffset = true;
 
     private List<PracticeCheckpointData> checkpoints =
         new List<PracticeCheckpointData>();
@@ -133,16 +135,9 @@ public class PracticeModeManager : MonoBehaviour
         checkpoints.Clear();
         checkpointMarkers.Clear();
 
-        checkpointTimer = 0f;
         isRespawning = false;
-
-        hasPendingGravityState = false;
-        pendingGravityState = false;
-        temporaryGravityBonusWasUsed = false;
-
-        jumpCounter = 0;
-        waitingForLandingCheckpoint = false;
-        wasGroundedLastFrame = false;
+        ResetPendingBonusState();
+        ResetCheckpointCounters();
 
         if (DeathMenuUI.PracticeModeActive)
             SaveCheckpoint(player.position, false);
@@ -150,13 +145,10 @@ public class PracticeModeManager : MonoBehaviour
 
     void Update()
     {
-        if (!DeathMenuUI.PracticeModeActive) return;
-        if (isRespawning) return;
-        if (deathScript != null && deathScript.IsDead()) return;
+        if (!CanUpdatePracticeCheckpoints())
+            return;
 
-        if (blockCheckpointsInFlightMode &&
-            playerMove != null &&
-            playerMove.IsFlightModeActive())
+        if (ShouldBlockCheckpointsInFlight())
         {
             checkpointTimer = 0f;
             return;
@@ -220,24 +212,14 @@ public class PracticeModeManager : MonoBehaviour
 
     public void NotifyPlayerJumped()
     {
-        if (!DeathMenuUI.PracticeModeActive)
-            return;
-
         if (checkpointSpawnMode != CheckpointSpawnMode.JumpCount)
             return;
 
-        if (isRespawning)
+        if (!CanUpdatePracticeCheckpoints())
             return;
 
-        if (deathScript != null && deathScript.IsDead())
+        if (ShouldBlockCheckpointsInFlight())
             return;
-
-        if (blockCheckpointsInFlightMode &&
-            playerMove != null &&
-            playerMove.IsFlightModeActive())
-        {
-            return;
-        }
 
         if (waitingForLandingCheckpoint)
             return;
@@ -280,26 +262,8 @@ public class PracticeModeManager : MonoBehaviour
         if (!DeathMenuUI.PracticeModeActive)
             return;
 
-        if (blockCheckpointsInFlightMode &&
-            playerMove != null &&
-            playerMove.IsFlightModeActive())
-        {
+        if (ShouldBlockCheckpointsInFlight())
             return;
-        }
-
-        Vector3 checkpointPos =
-            position + Vector3.up * checkpointYOffset;
-
-        if (checkpoints.Count > 0)
-        {
-            float dist = Vector3.Distance(
-                checkpoints[checkpoints.Count - 1].position,
-                checkpointPos
-            );
-
-            if (dist < minDistanceBetweenCheckpoints)
-                return;
-        }
 
         bool jumpBoostState = false;
         bool gravityState = false;
@@ -315,6 +279,7 @@ public class PracticeModeManager : MonoBehaviour
             speedBoostState = speedBoostBonus.IsBoosted();
 
         if (temporaryGravityBonusWasUsed &&
+            !saveActualGravityAfterTemporaryBonus &&
             forceNormalGravityAfterTemporaryBonus)
         {
             gravityState = false;
@@ -325,6 +290,20 @@ public class PracticeModeManager : MonoBehaviour
         {
             gravityState = pendingGravityState;
             hasPendingGravityState = false;
+        }
+
+        Vector3 checkpointPos =
+            position + GetCheckpointOffset(gravityState);
+
+        if (checkpoints.Count > 0)
+        {
+            float dist = Vector3.Distance(
+                checkpoints[checkpoints.Count - 1].position,
+                checkpointPos
+            );
+
+            if (dist < minDistanceBetweenCheckpoints)
+                return;
         }
 
         checkpoints.Add(
@@ -360,7 +339,8 @@ public class PracticeModeManager : MonoBehaviour
         if (checkpointMarkerPrefab == null)
             return null;
 
-        Vector3 markerPosition = basePosition + markerOffset;
+        bool gravityState = gravityFlip != null && gravityFlip.IsGravityInverted();
+        Vector3 markerPosition = basePosition + GetMarkerOffset(gravityState);
 
         return Instantiate(
             checkpointMarkerPrefab,
@@ -369,11 +349,31 @@ public class PracticeModeManager : MonoBehaviour
         );
     }
 
+    private Vector3 GetCheckpointOffset(bool gravityInverted)
+    {
+        if (!useGravityRelativeCheckpointOffset)
+            return Vector3.up * checkpointYOffset;
+
+        Vector3 awayFromSurface = gravityInverted ? Vector3.down : Vector3.up;
+        return awayFromSurface * checkpointYOffset;
+    }
+
+    private Vector3 GetMarkerOffset(bool gravityInverted)
+    {
+        if (!useGravityRelativeCheckpointOffset)
+            return markerOffset;
+
+        return gravityInverted
+            ? new Vector3(markerOffset.x, -markerOffset.y, markerOffset.z)
+            : markerOffset;
+    }
+
     public void RespawnFromCheckpoint()
     {
         if (!DeathMenuUI.PracticeModeActive) return;
         if (checkpoints.Count == 0) return;
         if (isRespawning) return;
+        if (IsRaceFinished()) return;
 
         StartCoroutine(RespawnCoroutine());
     }
@@ -383,6 +383,12 @@ public class PracticeModeManager : MonoBehaviour
         isRespawning = true;
 
         yield return new WaitForSeconds(respawnDelay);
+
+        if (IsRaceFinished())
+        {
+            isRespawning = false;
+            yield break;
+        }
 
         PracticeCheckpointData checkpoint =
             checkpoints[checkpoints.Count - 1];
@@ -446,12 +452,48 @@ public class PracticeModeManager : MonoBehaviour
         if (skinRollVisualController != null)
             skinRollVisualController.ResetMotionTracking();
 
+        ResetCheckpointCounters();
+
+        isRespawning = false;
+    }
+
+    private bool CanUpdatePracticeCheckpoints()
+    {
+        if (!DeathMenuUI.PracticeModeActive)
+            return false;
+
+        if (isRespawning)
+            return false;
+
+        return deathScript == null || !deathScript.IsDead();
+    }
+
+    private bool ShouldBlockCheckpointsInFlight()
+    {
+        return blockCheckpointsInFlightMode &&
+               playerMove != null &&
+               playerMove.IsFlightModeActive();
+    }
+
+    private bool IsRaceFinished()
+    {
+        return RaceModeManager.ActiveRace != null &&
+               RaceModeManager.ActiveRace.IsFinished;
+    }
+
+    private void ResetCheckpointCounters()
+    {
         checkpointTimer = 0f;
         jumpCounter = 0;
         waitingForLandingCheckpoint = false;
         wasGroundedLastFrame = false;
+    }
 
-        isRespawning = false;
+    private void ResetPendingBonusState()
+    {
+        hasPendingGravityState = false;
+        pendingGravityState = false;
+        temporaryGravityBonusWasUsed = false;
     }
 
     public void RemoveLastCheckpoint()

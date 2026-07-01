@@ -3,6 +3,12 @@ using System.Collections;
 
 public class PlayerDeathEffect : MonoBehaviour
 {
+    private const string LeftTrigger = "left";
+    private const string RightTrigger = "right";
+    private const string JumpTrigger = "jump";
+    private const string FallTrigger = "fall";
+    private const string GroundedBool = "isGrounded";
+
     [Header("References")]
     public GameObject aliveModel;
     public Transform animatedModelRoot;
@@ -145,11 +151,7 @@ public class PlayerDeathEffect : MonoBehaviour
             part.AddTorque(Random.insideUnitSphere * randomTorque, ForceMode.Impulse);
         }
 
-        for (int i = 0; i < partColliders.Length; i++)
-        {
-            if (partColliders[i] != null)
-                partColliders[i].enabled = true;
-        }
+        SetFragmentCollidersEnabled(true);
 
         StartCoroutine(ShrinkAndCleanup());
     }
@@ -178,13 +180,13 @@ public class PlayerDeathEffect : MonoBehaviour
 
         if (aliveAnimator != null)
         {
-            aliveAnimator.ResetTrigger("left");
-            aliveAnimator.ResetTrigger("right");
-            aliveAnimator.ResetTrigger("jump");
-            aliveAnimator.ResetTrigger("fall");
+            aliveAnimator.ResetTrigger(LeftTrigger);
+            aliveAnimator.ResetTrigger(RightTrigger);
+            aliveAnimator.ResetTrigger(JumpTrigger);
+            aliveAnimator.ResetTrigger(FallTrigger);
 
-            if (HasBoolParameter(aliveAnimator, "isGrounded"))
-                aliveAnimator.SetBool("isGrounded", false);
+            if (HasBoolParameter(aliveAnimator, GroundedBool))
+                aliveAnimator.SetBool(GroundedBool, false);
 
             bool shouldUseBaseAnimator = true;
 
@@ -216,22 +218,11 @@ public class PlayerDeathEffect : MonoBehaviour
             if (part == null || t == null)
                 continue;
 
-            t.SetParent(activeFragmentsRoot, false);
-            t.localPosition = initialLocalPositions[i];
-            t.localRotation = initialLocalRotations[i];
-            t.localScale = initialLocalScales[i];
-
-            part.isKinematic = true;
-            part.useGravity = false;
-            part.linearVelocity = Vector3.zero;
-            part.angularVelocity = Vector3.zero;
+            ResetTransformToInitial(i);
+            ResetFragmentBody(part);
         }
 
-        for (int i = 0; i < partColliders.Length; i++)
-        {
-            if (partColliders[i] != null)
-                partColliders[i].enabled = false;
-        }
+        SetFragmentCollidersEnabled(false);
 
         activeFragmentsRoot.gameObject.SetActive(false);
     }
@@ -248,7 +239,7 @@ public class PlayerDeathEffect : MonoBehaviour
 
         if (activeFragmentsRoot == null)
         {
-            Debug.LogWarning("PlayerDeathEffect: fragmentsRoot не назначен.");
+            Debug.LogWarning("PlayerDeathEffect: fragmentsRoot is not assigned.");
             partBodies = new Rigidbody[0];
             partColliders = new Collider[0];
             partTransforms = new Transform[0];
@@ -297,10 +288,9 @@ public class PlayerDeathEffect : MonoBehaviour
             if (part == null)
                 continue;
 
+            ZeroFragmentVelocityIfDynamic(part);
             part.isKinematic = true;
             part.useGravity = false;
-            part.linearVelocity = Vector3.zero;
-            part.angularVelocity = Vector3.zero;
             part.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
 
@@ -344,6 +334,60 @@ public class PlayerDeathEffect : MonoBehaviour
         overrideFragmentsMaterial = null;
         overrideFragmentsMaterials = null;
         RestoreOriginalMaterials();
+    }
+
+    private void ZeroFragmentVelocityIfDynamic(Rigidbody part)
+    {
+        if (part == null || part.isKinematic)
+            return;
+
+        part.linearVelocity = Vector3.zero;
+        part.angularVelocity = Vector3.zero;
+    }
+
+    private void ResetFragmentBody(Rigidbody part)
+    {
+        if (part == null)
+            return;
+
+        ZeroFragmentVelocityIfDynamic(part);
+        part.isKinematic = true;
+        part.useGravity = false;
+    }
+
+    private void ResetTransformToInitial(int index)
+    {
+        if (partTransforms == null ||
+            initialLocalPositions == null ||
+            initialLocalRotations == null ||
+            initialLocalScales == null)
+        {
+            return;
+        }
+
+        if (index < 0 || index >= partTransforms.Length)
+            return;
+
+        Transform t = partTransforms[index];
+        if (t == null)
+            return;
+
+        t.SetParent(activeFragmentsRoot, false);
+        t.localPosition = initialLocalPositions[index];
+        t.localRotation = initialLocalRotations[index];
+        t.localScale = initialLocalScales[index];
+    }
+
+    private void SetFragmentCollidersEnabled(bool value)
+    {
+        if (partColliders == null)
+            return;
+
+        for (int i = 0; i < partColliders.Length; i++)
+        {
+            if (partColliders[i] != null)
+                partColliders[i].enabled = value;
+        }
     }
 
     private bool EnsureFragmentsReady()
@@ -494,22 +538,11 @@ public class PlayerDeathEffect : MonoBehaviour
                 if (part == null || t == null)
                     continue;
 
-                part.isKinematic = true;
-                part.useGravity = false;
-                part.linearVelocity = Vector3.zero;
-                part.angularVelocity = Vector3.zero;
-
-                t.SetParent(activeFragmentsRoot, false);
-                t.localPosition = initialLocalPositions[i];
-                t.localRotation = initialLocalRotations[i];
-                t.localScale = initialLocalScales[i];
+                ResetFragmentBody(part);
+                ResetTransformToInitial(i);
             }
 
-            for (int i = 0; i < partColliders.Length; i++)
-            {
-                if (partColliders[i] != null)
-                    partColliders[i].enabled = false;
-            }
+            SetFragmentCollidersEnabled(false);
 
             if (activeFragmentsRoot != null)
                 activeFragmentsRoot.gameObject.SetActive(false);

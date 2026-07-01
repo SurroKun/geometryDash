@@ -6503,9 +6503,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalLoopbackRaceTransport
   connectOnStart: 1
-  echoLocalSnapshots: 1
+  mode: 0
   simulatedLatency: 0.08
   receivedPositionOffset: {x: 1.4, y: 0, z: 0}
+  hideWhenNoSavedRun: 1
 --- !u!4 &506565756
 Transform:
   m_ObjectHideFlags: 0
@@ -7468,11 +7469,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b89fb8ad751989340bbe94f567ee1d78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RemoteRacePlayerController
+  race: {fileID: 0}
   transport: {fileID: 0}
   remotePlayback: {fileID: 0}
   autoResolveReferences: 1
   connectTransportOnEnable: 1
   applySnapshots: 1
+  applyOnlyWhenRaceRunning: 1
+  hideUntilRaceRunning: 1
+  clearSnapshotWhenRaceRestarts: 1
+  warnIfPlaybackLooksLocal: 1
+  interpolateSnapshots: 1
+  interpolationDelay: 0.12
+  maxBufferedSeconds: 1.5
+  snapDistance: 6
 --- !u!65 &550713447
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29272,6 +29282,8 @@ MonoBehaviour:
   localRecorder: {fileID: 0}
   ghostPlayback: {fileID: 0}
   transport: {fileID: 0}
+  localTrail: {fileID: 0}
+  localRollVisualController: {fileID: 0}
   statusText: {fileID: 0}
   timerText: {fileID: 0}
   raceUI: {fileID: 0}
@@ -29284,6 +29296,7 @@ MonoBehaviour:
   controlRecorderTiming: 1
   controlGhostTiming: 0
   saveRunOnFinish: 1
+  waitForRemoteResult: 1
   countdownSeconds: 3
   enableSnapshotTransport: 1
   connectTransportOnStart: 1

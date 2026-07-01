@@ -1,7 +1,18 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMove : MonoBehaviour
 {
+    private const string GroundTag = "Ground";
+    private const string ObstacleTag = "Obstacle";
+    private const string AirJumpTag = "AirJump";
+
+    private const string LeftTrigger = "left";
+    private const string RightTrigger = "right";
+    private const string JumpTrigger = "jump";
+    private const string FallTrigger = "fall";
+    private const string GroundedBool = "isGrounded";
+
     [Header("Move")]
     public float forwardSpeed = 6.3f;
     public float stepSize = 2f;
@@ -103,6 +114,13 @@ public class PlayerMove : MonoBehaviour
         practiceModeManager = GetComponent<PracticeModeManager>();
         rb = GetComponent<Rigidbody>();
 
+        if (rb == null)
+        {
+            Debug.LogError("PlayerMove requires a Rigidbody.");
+            enabled = false;
+            return;
+        }
+
         startX = rb.position.x;
         currentX = startX;
 
@@ -120,20 +138,12 @@ public class PlayerMove : MonoBehaviour
 
         CacheModelStartTransform();
 
-        if (anim != null && HasBoolParameter(anim, "isGrounded"))
-            anim.SetBool("isGrounded", false);
+        SetAnimatorGrounded(false);
     }
 
     void Update()
     {
-        if (sideInputBlockTimer > 0f)
-            sideInputBlockTimer -= Time.deltaTime;
-
-        if (dashCooldownTimer > 0f)
-            dashCooldownTimer -= Time.deltaTime;
-
-        if (jumpBlockAfterDashTimer > 0f)
-            jumpBlockAfterDashTimer -= Time.deltaTime;
+        UpdateTimers();
 
         if (isFlightModeActive)
         {
@@ -181,13 +191,10 @@ public class PlayerMove : MonoBehaviour
         if (sideInputBlockTimer > 0f)
             return;
 
-        bool leftHeld = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
-        bool rightHeld = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
+        bool leftHeld = IsLeftHeld();
+        bool rightHeld = IsRightHeld();
 
-        float targetX = startX + step * stepSize;
-        bool nearLaneCenter = Mathf.Abs(rb.position.x - targetX) <= laneSnapThreshold;
-
-        if (!nearLaneCenter)
+        if (!IsNearLaneCenter())
             return;
 
         if (leftHeld == rightHeld)
@@ -198,36 +205,22 @@ public class PlayerMove : MonoBehaviour
         if (!invertedNow)
         {
             if (leftHeld && step < maxSteps)
-            {
-                step++;
-                if (anim != null) anim.SetTrigger("left");
-            }
+                MoveLaneLeft();
             else if (rightHeld && step > -maxSteps)
-            {
-                step--;
-                if (anim != null) anim.SetTrigger("right");
-            }
+                MoveLaneRight();
         }
         else
         {
             if (leftHeld && step > -maxSteps)
-            {
-                step--;
-                if (anim != null) anim.SetTrigger("right");
-            }
+                MoveLaneRight();
             else if (rightHeld && step < maxSteps)
-            {
-                step++;
-                if (anim != null) anim.SetTrigger("left");
-            }
+                MoveLaneLeft();
         }
     }
 
     void HandleJumpInput()
     {
-        bool jumpHeld =
-            Input.GetKey(KeyCode.UpArrow) ||
-            Input.GetKey(KeyCode.W);
+        bool jumpHeld = IsJumpHeld();
 
         if (blockJumpRightAfterDash && jumpBlockAfterDashTimer > 0f)
         {
@@ -250,78 +243,26 @@ public class PlayerMove : MonoBehaviour
 
         coyoteTimeCounter -= Time.deltaTime;
 
-        if (jumpBufferCounter > 0f)
+        if (jumpBufferCounter <= 0f)
+            return;
+
+        if (CanGroundJump())
         {
-            float jumpDirection = 1f;
+            if (cancelSpeedDashBeforeNormalJump)
+                CancelSpeedDashIfActive();
 
-            if (gravityFlip != null && gravityFlip.IsGravityInverted())
-                jumpDirection = -1f;
+            PerformJump();
 
-            if (coyoteTimeCounter > 0f && !hasJumpedThisAir)
-            {
-                if (cancelSpeedDashBeforeNormalJump &&
-                    speedDashBonus != null &&
-                    speedDashBonus.IsDashing())
-                {
-                    speedDashBonus.CancelDashForOtherBonus();
-                }
+            coyoteTimeCounter = 0f;
+            hasJumpedThisAir = true;
+        }
+        else if (canAirJump)
+        {
+            if (cancelSpeedDashBeforeAirJump)
+                CancelSpeedDashIfActive();
 
-                rb.linearVelocity = new Vector3(
-                    rb.linearVelocity.x,
-                    0f,
-                    rb.linearVelocity.z
-                );
-
-                rb.AddForce(
-                    Vector3.up * jumpForce * jumpDirection,
-                    ForceMode.Impulse
-                );
-
-                jumpBufferCounter = 0f;
-                coyoteTimeCounter = 0f;
-                hasJumpedThisAir = true;
-
-                NotifyPracticeJump();
-
-                if (anim != null)
-                {
-                    anim.ResetTrigger("fall");
-                    anim.SetTrigger("jump");
-                }
-            }
-            else if (canAirJump)
-            {
-                if (cancelSpeedDashBeforeAirJump &&
-                    speedDashBonus != null &&
-                    speedDashBonus.IsDashing())
-                {
-                    speedDashBonus.CancelDashForOtherBonus();
-                }
-
-                rb.linearVelocity = new Vector3(
-                    rb.linearVelocity.x,
-                    0f,
-                    rb.linearVelocity.z
-                );
-
-                rb.AddForce(
-                    Vector3.up * jumpForce * jumpDirection,
-                    ForceMode.Impulse
-                );
-
-                jumpBufferCounter = 0f;
-
-                canAirJump = false;
-                currentAirJumpObject = null;
-
-                NotifyPracticeJump();
-
-                if (anim != null)
-                {
-                    anim.ResetTrigger("fall");
-                    anim.SetTrigger("jump");
-                }
-            }
+            PerformJump();
+            ClearAirJump();
         }
     }
 
@@ -331,46 +272,102 @@ public class PlayerMove : MonoBehaviour
             practiceModeManager.NotifyPlayerJumped();
     }
 
+    private bool CanGroundJump()
+    {
+        return coyoteTimeCounter > 0f && !hasJumpedThisAir;
+    }
+
+    private void PerformJump()
+    {
+        SetVerticalVelocity(0f);
+        rb.AddForce(
+            Vector3.up * jumpForce * GetGravityDirection(),
+            ForceMode.Impulse
+        );
+
+        jumpBufferCounter = 0f;
+        NotifyPracticeJump();
+        PlayJumpAnimation();
+    }
+
+    private void ClearAirJump()
+    {
+        canAirJump = false;
+        currentAirJumpObject = null;
+    }
+
+    private void CancelSpeedDashIfActive()
+    {
+        if (speedDashBonus != null && speedDashBonus.IsDashing())
+            speedDashBonus.CancelDashForOtherBonus();
+    }
+
+    private float GetGravityDirection()
+    {
+        if (gravityFlip != null && gravityFlip.IsGravityInverted())
+            return -1f;
+
+        return 1f;
+    }
+
+    private void SetVerticalVelocity(float velocityY)
+    {
+        rb.linearVelocity = new Vector3(
+            rb.linearVelocity.x,
+            velocityY,
+            rb.linearVelocity.z
+        );
+    }
+
+    private void PlayJumpAnimation()
+    {
+        if (anim == null)
+            return;
+
+        anim.ResetTrigger(FallTrigger);
+        anim.SetTrigger(JumpTrigger);
+    }
+
+    private void PlayDashAnimation()
+    {
+        if (anim == null)
+            return;
+
+        anim.ResetTrigger(JumpTrigger);
+        anim.SetTrigger(FallTrigger);
+    }
+
+    private bool CanDash()
+    {
+        if (dashBufferCounter <= 0f)
+            return false;
+
+        if (dashCooldownTimer > 0f)
+            return false;
+
+        if (hasDashedInAir)
+            return false;
+
+        return !isGrounded;
+    }
+
     void HandleDashInput()
     {
-        bool dashPressed =
-            Input.GetKeyDown(KeyCode.DownArrow) ||
-            Input.GetKeyDown(KeyCode.S);
+        bool dashPressed = IsDashPressed();
 
-        bool dashHeld =
-            Input.GetKey(KeyCode.DownArrow) ||
-            Input.GetKey(KeyCode.S);
+        bool dashHeld = IsDashHeld();
 
         if (dashPressed || dashHeld)
             dashBufferCounter = dashBufferTime;
         else
             dashBufferCounter -= Time.deltaTime;
 
-        if (dashBufferCounter <= 0f)
+        if (!CanDash())
             return;
 
-        if (dashCooldownTimer > 0f)
-            return;
+        CancelSpeedDashIfActive();
 
-        if (hasDashedInAir)
-            return;
-
-        if (isGrounded)
-            return;
-
-        float dashDirection = -1f;
-
-        if (gravityFlip != null && gravityFlip.IsGravityInverted())
-            dashDirection = 1f;
-
-        if (speedDashBonus != null && speedDashBonus.IsDashing())
-            speedDashBonus.CancelDashForOtherBonus();
-
-        rb.linearVelocity = new Vector3(
-            rb.linearVelocity.x,
-            dashForce * dashDirection,
-            rb.linearVelocity.z
-        );
+        SetVerticalVelocity(dashForce * -GetGravityDirection());
 
         dashCooldownTimer = dashCooldown;
 
@@ -386,11 +383,7 @@ public class PlayerMove : MonoBehaviour
         hasDashedInAir = true;
         hasJumpedThisAir = true;
 
-        if (anim != null)
-        {
-            anim.ResetTrigger("jump");
-            anim.SetTrigger("fall");
-        }
+        PlayDashAnimation();
     }
 
     void HandleBetterFall()
@@ -424,10 +417,10 @@ public class PlayerMove : MonoBehaviour
         if (sideInputBlockTimer > 0f)
             return;
 
-        bool leftHeld = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
-        bool rightHeld = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
-        bool upHeld = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
-        bool downHeld = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
+        bool leftHeld = IsLeftHeld();
+        bool rightHeld = IsRightHeld();
+        bool upHeld = IsJumpHeld();
+        bool downHeld = IsDashHeld();
 
         float targetX = flightStartX + flightHorizontalStep * flightHorizontalStepSize;
         float targetY = flightStartY + flightVerticalStep * flightVerticalStepSize;
@@ -496,80 +489,21 @@ public class PlayerMove : MonoBehaviour
 
         isFlightModeActive = true;
 
-        if (useFixedFlightBaseX)
-            flightStartX = fixedFlightBaseX;
-        else if (snapFlightXToNearestLane)
-        {
-            float rawStep = (rb.position.x - startX) / stepSize;
-            step = Mathf.RoundToInt(rawStep);
-            step = Mathf.Clamp(step, -maxSteps, maxSteps);
-            flightStartX = startX + step * stepSize;
-        }
-        else
-            flightStartX = rb.position.x;
-
-        if (useFixedFlightBaseY)
-            flightStartY = fixedFlightBaseY;
-        else
-            flightStartY = rb.position.y + flightStartYOffset;
-
-        currentFlightX = flightStartX;
-        currentFlightY = flightStartY;
-
-        flightHorizontalStep = 0;
-        flightVerticalStep = 0;
-
-        jumpBufferCounter = 0f;
-        dashBufferCounter = 0f;
-        coyoteTimeCounter = 0f;
-        dashCooldownTimer = 0f;
-        jumpBlockAfterDashTimer = 0f;
-
-        hasJumpedThisAir = false;
-        hasDashedInAir = false;
-
-        canAirJump = false;
-        currentAirJumpObject = null;
+        SetFlightStartPosition();
+        ResetFlightSteps();
+        ResetJumpDashState();
 
         isGrounded = false;
 
         if (speedDashBonus != null)
             speedDashBonus.CancelDashAndRestore();
 
-        if (freezeVelocityOnFlightStart && rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
+        if (freezeVelocityOnFlightStart)
+            ZeroRigidbodyMotion();
 
-        if (rb != null)
-        {
-            Vector3 pos = rb.position;
-            rb.position = new Vector3(flightStartX, flightStartY, pos.z);
-        }
-
+        MoveToFlightStartPosition();
         ResetModelToStartTransform();
-
-        if (anim != null)
-        {
-            anim.enabled = true;
-
-            anim.ResetTrigger("left");
-            anim.ResetTrigger("right");
-            anim.ResetTrigger("jump");
-            anim.ResetTrigger("fall");
-
-            if (HasBoolParameter(anim, "isGrounded"))
-                anim.SetBool("isGrounded", false);
-
-            anim.Rebind();
-            anim.Update(0f);
-
-            ResetModelToStartTransform();
-
-            if (disableAnimatorInFlight)
-                anim.enabled = false;
-        }
+        EnterFlightAnimationState();
 
         Debug.Log("Flight Mode ON");
     }
@@ -581,40 +515,13 @@ public class PlayerMove : MonoBehaviour
 
         isFlightModeActive = false;
 
-        jumpBufferCounter = 0f;
-        dashBufferCounter = 0f;
-        coyoteTimeCounter = 0f;
-        dashCooldownTimer = 0f;
-        jumpBlockAfterDashTimer = 0f;
+        ResetJumpDashState();
 
-        hasJumpedThisAir = false;
-        hasDashedInAir = false;
+        ZeroRigidbodyMotion();
 
-        canAirJump = false;
-        currentAirJumpObject = null;
-
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
-        if (disableAnimatorInFlight && anim != null)
-        {
-            anim.enabled = true;
-
-            anim.ResetTrigger("left");
-            anim.ResetTrigger("right");
-            anim.ResetTrigger("jump");
-            anim.ResetTrigger("fall");
-
-            if (HasBoolParameter(anim, "isGrounded"))
-                anim.SetBool("isGrounded", false);
-
-            anim.Update(0f);
-        }
-
+        ExitFlightAnimationState();
         ResetModelToStartTransform();
+
         SnapToLaneByWorldX(rb.position.x);
 
         Debug.Log("Flight Mode OFF");
@@ -630,8 +537,7 @@ public class PlayerMove : MonoBehaviour
         if (isFlightModeActive)
             return;
 
-        if (collision.gameObject.CompareTag("Ground") ||
-            collision.gameObject.CompareTag("Obstacle"))
+        if (IsGroundCollision(collision))
         {
             isGrounded = true;
 
@@ -644,27 +550,30 @@ public class PlayerMove : MonoBehaviour
             if (resetDashWhenTouchGround)
                 hasDashedInAir = false;
 
-            if (anim != null && HasBoolParameter(anim, "isGrounded"))
-                anim.SetBool("isGrounded", true);
+            SetAnimatorGrounded(true);
         }
     }
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") ||
-            collision.gameObject.CompareTag("Obstacle"))
+        if (IsGroundCollision(collision))
         {
             isGrounded = false;
             coyoteTimeCounter = 0f;
 
-            if (anim != null && HasBoolParameter(anim, "isGrounded"))
-                anim.SetBool("isGrounded", false);
+            SetAnimatorGrounded(false);
         }
+    }
+
+    private bool IsGroundCollision(Collision collision)
+    {
+        return collision.gameObject.CompareTag(GroundTag) ||
+               collision.gameObject.CompareTag(ObstacleTag);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("AirJump"))
+        if (other.CompareTag(AirJumpTag))
         {
             canAirJump = true;
             currentAirJumpObject = other.gameObject;
@@ -685,12 +594,9 @@ public class PlayerMove : MonoBehaviour
 
         currentX = startX + step * stepSize;
 
-        if (rb != null)
-        {
-            Vector3 pos = rb.position;
-            pos.x = currentX;
-            rb.position = pos;
-        }
+        Vector3 pos = rb.position;
+        pos.x = currentX;
+        rb.position = pos;
     }
 
     public void ResetAfterRespawn(float respawnX)
@@ -702,17 +608,7 @@ public class PlayerMove : MonoBehaviour
 
         ResetModelToStartTransform();
 
-        hasJumpedThisAir = false;
-        hasDashedInAir = false;
-
-        canAirJump = false;
-        currentAirJumpObject = null;
-
-        jumpBufferCounter = 0f;
-        coyoteTimeCounter = 0f;
-        dashBufferCounter = 0f;
-        dashCooldownTimer = 0f;
-        jumpBlockAfterDashTimer = 0f;
+        ResetJumpDashState();
 
         if (speedDashBonus != null)
             speedDashBonus.CancelDashAndRestore();
@@ -720,11 +616,7 @@ public class PlayerMove : MonoBehaviour
         isGrounded = false;
         sideInputBlockTimer = sideInputBlockAfterRespawn;
 
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
+        ZeroRigidbodyMotion();
 
         SnapToLaneByWorldX(respawnX);
 
@@ -734,18 +626,12 @@ public class PlayerMove : MonoBehaviour
         currentFlightX = flightStartX;
         currentFlightY = flightStartY;
 
-        flightHorizontalStep = 0;
-        flightVerticalStep = 0;
+        ResetFlightSteps();
 
         if (anim != null)
         {
-            anim.ResetTrigger("left");
-            anim.ResetTrigger("right");
-            anim.ResetTrigger("jump");
-            anim.ResetTrigger("fall");
-
-            if (HasBoolParameter(anim, "isGrounded"))
-                anim.SetBool("isGrounded", false);
+            ResetAnimatorTriggers();
+            SetAnimatorGrounded(false);
         }
     }
 
@@ -772,6 +658,186 @@ public class PlayerMove : MonoBehaviour
         animatedModelRoot.localPosition = modelStartLocalPosition;
         animatedModelRoot.localRotation = modelStartLocalRotation;
         animatedModelRoot.localScale = modelStartLocalScale;
+    }
+
+    private void SetFlightStartPosition()
+    {
+        flightStartX = GetFlightStartX();
+        flightStartY = GetFlightStartY();
+
+        currentFlightX = flightStartX;
+        currentFlightY = flightStartY;
+    }
+
+    private float GetFlightStartX()
+    {
+        if (useFixedFlightBaseX)
+            return fixedFlightBaseX;
+
+        if (!snapFlightXToNearestLane)
+            return rb.position.x;
+
+        float rawStep = (rb.position.x - startX) / stepSize;
+        step = Mathf.RoundToInt(rawStep);
+        step = Mathf.Clamp(step, -maxSteps, maxSteps);
+
+        return startX + step * stepSize;
+    }
+
+    private float GetFlightStartY()
+    {
+        if (useFixedFlightBaseY)
+            return fixedFlightBaseY;
+
+        return rb.position.y + flightStartYOffset;
+    }
+
+    private void MoveToFlightStartPosition()
+    {
+        Vector3 pos = rb.position;
+        rb.position = new Vector3(flightStartX, flightStartY, pos.z);
+    }
+
+    private void EnterFlightAnimationState()
+    {
+        if (anim == null)
+            return;
+
+        anim.enabled = true;
+
+        ResetAnimatorTriggers();
+        SetAnimatorGrounded(false);
+
+        anim.Rebind();
+        anim.Update(0f);
+
+        ResetModelToStartTransform();
+
+        if (disableAnimatorInFlight)
+            anim.enabled = false;
+    }
+
+    private void ExitFlightAnimationState()
+    {
+        if (!disableAnimatorInFlight || anim == null)
+            return;
+
+        anim.enabled = true;
+
+        ResetAnimatorTriggers();
+        SetAnimatorGrounded(false);
+
+        anim.Update(0f);
+    }
+
+    private bool IsLeftHeld()
+    {
+        return GameInput.IsKeyHeld(KeyCode.LeftArrow) || GameInput.IsKeyHeld(KeyCode.A);
+    }
+
+    private bool IsRightHeld()
+    {
+        return GameInput.IsKeyHeld(KeyCode.RightArrow) || GameInput.IsKeyHeld(KeyCode.D);
+    }
+
+    private bool IsJumpHeld()
+    {
+        return GameInput.IsKeyHeld(KeyCode.UpArrow) || GameInput.IsKeyHeld(KeyCode.W);
+    }
+
+    private bool IsDashHeld()
+    {
+        return GameInput.IsKeyHeld(KeyCode.DownArrow) || GameInput.IsKeyHeld(KeyCode.S);
+    }
+
+    private bool IsDashPressed()
+    {
+        return GameInput.WasKeyPressedThisFrame(KeyCode.DownArrow) ||
+               GameInput.WasKeyPressedThisFrame(KeyCode.S);
+    }
+
+    private void UpdateTimers()
+    {
+        TickTimer(ref sideInputBlockTimer);
+        TickTimer(ref dashCooldownTimer);
+        TickTimer(ref jumpBlockAfterDashTimer);
+    }
+
+    private void TickTimer(ref float timer)
+    {
+        if (timer > 0f)
+            timer -= Time.deltaTime;
+    }
+
+    private bool IsNearLaneCenter()
+    {
+        float targetX = startX + step * stepSize;
+        return Mathf.Abs(rb.position.x - targetX) <= laneSnapThreshold;
+    }
+
+    private void MoveLaneLeft()
+    {
+        step++;
+        SetAnimatorTrigger(LeftTrigger);
+    }
+
+    private void MoveLaneRight()
+    {
+        step--;
+        SetAnimatorTrigger(RightTrigger);
+    }
+
+    private void SetAnimatorTrigger(string triggerName)
+    {
+        if (anim != null)
+            anim.SetTrigger(triggerName);
+    }
+
+    private void ResetJumpDashState()
+    {
+        jumpBufferCounter = 0f;
+        coyoteTimeCounter = 0f;
+        dashBufferCounter = 0f;
+        dashCooldownTimer = 0f;
+        jumpBlockAfterDashTimer = 0f;
+
+        hasJumpedThisAir = false;
+        hasDashedInAir = false;
+
+        canAirJump = false;
+        currentAirJumpObject = null;
+    }
+
+    private void ResetFlightSteps()
+    {
+        flightHorizontalStep = 0;
+        flightVerticalStep = 0;
+    }
+
+    private void ZeroRigidbodyMotion()
+    {
+        if (rb == null)
+            return;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    private void ResetAnimatorTriggers()
+    {
+        if (anim == null)
+            return;
+
+        anim.ResetTrigger(LeftTrigger);
+        anim.ResetTrigger(RightTrigger);
+        anim.ResetTrigger(JumpTrigger);
+        anim.ResetTrigger(FallTrigger);
+    }
+
+    private void SetAnimatorGrounded(bool value)
+    {
+        if (anim != null && HasBoolParameter(anim, GroundedBool))
+            anim.SetBool(GroundedBool, value);
     }
 
     private bool HasBoolParameter(

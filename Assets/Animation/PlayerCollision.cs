@@ -2,6 +2,8 @@
 
 public class PlayerCollision : MonoBehaviour
 {
+    private const string ObstacleTag = "Obstacle";
+
     private DeathScript deathScript;
 
     void Start()
@@ -11,7 +13,7 @@ public class PlayerCollision : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Obstacle"))
+        if (!other.CompareTag(ObstacleTag))
             return;
 
         Debug.Log("Dead from obstacle trigger");

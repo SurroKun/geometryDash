@@ -105,7 +105,7 @@ public class PlayerSkinVFXController : MonoBehaviour
             if (profile.trailPrefabOverride != null)
                 finalTrailPrefab = profile.trailPrefabOverride;
 
-            if (profile.trailMaterialsOverride != null && profile.trailMaterialsOverride.Length > 0)
+            if (HasMaterials(profile.trailMaterialsOverride))
             {
                 finalTrailMaterials = profile.trailMaterialsOverride;
                 finalTrailMaterial = null;
@@ -125,12 +125,7 @@ public class PlayerSkinVFXController : MonoBehaviour
         trail.SetSpawnPoints(finalSpawnPoints);
         trail.SetSpawnOnlyWhenGrounded(finalSpawnOnlyWhenGrounded);
 
-        if (finalTrailMaterials != null && finalTrailMaterials.Length > 0)
-            trail.SetOverrideMaterials(finalTrailMaterials);
-        else if (finalTrailMaterial != null)
-            trail.SetOverrideMaterial(finalTrailMaterial);
-        else
-            trail.ClearOverrideMaterial();
+        ApplyTrailMaterial(finalTrailMaterial, finalTrailMaterials);
 
         trail.ResetTrail();
     }
@@ -149,7 +144,7 @@ public class PlayerSkinVFXController : MonoBehaviour
             if (profile.deathFragmentsRootOverride != null)
                 finalFragmentsRoot = profile.deathFragmentsRootOverride;
 
-            if (profile.deathMaterialsOverride != null && profile.deathMaterialsOverride.Length > 0)
+            if (HasMaterials(profile.deathMaterialsOverride))
             {
                 finalDeathMaterials = profile.deathMaterialsOverride;
                 finalDeathMaterial = null;
@@ -162,12 +157,7 @@ public class PlayerSkinVFXController : MonoBehaviour
 
         deathEffect.SetOverrideFragmentsRoot(finalFragmentsRoot);
 
-        if (finalDeathMaterials != null && finalDeathMaterials.Length > 0)
-            deathEffect.SetOverrideMaterials(finalDeathMaterials);
-        else if (finalDeathMaterial != null)
-            deathEffect.SetOverrideMaterial(finalDeathMaterial);
-        else
-            deathEffect.ClearOverrideMaterial();
+        ApplyDeathMaterial(finalDeathMaterial, finalDeathMaterials);
     }
 
     private void ApplyAnimation(SkinVFXProfile profile)
@@ -175,12 +165,47 @@ public class PlayerSkinVFXController : MonoBehaviour
         if (rollVisualController == null)
             return;
 
-        SkinAnimationMode mode = SkinAnimationMode.Default;
-
-        if (profile != null)
-            mode = profile.animationMode;
+        SkinAnimationMode mode = GetProfileAnimationMode(profile);
 
         rollVisualController.SetMode(mode == SkinAnimationMode.Rolling);
         rollVisualController.RefreshTarget();
+    }
+
+    private bool HasMaterials(Material[] materials)
+    {
+        return materials != null && materials.Length > 0;
+    }
+
+    private void ApplyTrailMaterial(
+        Material material,
+        Material[] materials
+    )
+    {
+        if (HasMaterials(materials))
+            trail.SetOverrideMaterials(materials);
+        else if (material != null)
+            trail.SetOverrideMaterial(material);
+        else
+            trail.ClearOverrideMaterial();
+    }
+
+    private void ApplyDeathMaterial(
+        Material material,
+        Material[] materials
+    )
+    {
+        if (HasMaterials(materials))
+            deathEffect.SetOverrideMaterials(materials);
+        else if (material != null)
+            deathEffect.SetOverrideMaterial(material);
+        else
+            deathEffect.ClearOverrideMaterial();
+    }
+
+    private SkinAnimationMode GetProfileAnimationMode(SkinVFXProfile profile)
+    {
+        return profile != null
+            ? profile.animationMode
+            : SkinAnimationMode.Default;
     }
 }

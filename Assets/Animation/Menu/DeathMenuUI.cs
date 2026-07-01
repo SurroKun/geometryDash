@@ -16,13 +16,13 @@ public class DeathMenuUI : MonoBehaviour
     public float deathPauseDelay = 0.25f;
     public float resetDelay = 0.35f;
 
+    private const string SkipDeathMenuKey = "SkipDeathMenu";
+    private const string PracticeModeKey = "PracticeMode";
+
     private bool isMenuShown = false;
     private bool isPaused = false;
     private bool isWaitingForPause = false;
     private bool isWaitingForReset = false;
-
-    private const string SkipDeathMenuKey = "SkipDeathMenu";
-    private const string PracticeModeKey = "PracticeMode";
 
     private bool SkipDeathMenu
     {
@@ -44,26 +44,15 @@ public class DeathMenuUI : MonoBehaviour
         }
     }
 
-    // 👇 ДОБАВЛЕНО: сброс всех флагов
-    private void ResetStateFlags()
-    {
-        isMenuShown = false;
-        isPaused = false;
-        isWaitingForPause = false;
-        isWaitingForReset = false;
-    }
-
     void Start()
     {
-        if (deathMenu != null)
-            deathMenu.SetActive(false);
-
+        SetDeathMenuVisible(false);
         Time.timeScale = 1f;
     }
 
     public void ShowDeathMenu()
     {
-        if (isMenuShown || isWaitingForPause || isWaitingForReset)
+        if (IsMenuBusy())
             return;
 
         if (SkipDeathMenu)
@@ -72,50 +61,18 @@ public class DeathMenuUI : MonoBehaviour
             return;
         }
 
-        isMenuShown = true;
-        isPaused = false;
+        ShowMenu(false);
         isWaitingForPause = true;
-
-        if (resumeButton != null)
-            resumeButton.SetActive(false);
-
-        if (deathMenu != null)
-            deathMenu.SetActive(true);
 
         StartCoroutine(PauseAfterDeathDelay());
     }
 
-    private IEnumerator PauseAfterDeathDelay()
-    {
-        yield return new WaitForSeconds(deathPauseDelay);
-        Time.timeScale = 0f;
-        isWaitingForPause = false;
-    }
-
-    private IEnumerator ResetAfterDeathDelay()
-    {
-        isWaitingForReset = true;
-        yield return new WaitForSeconds(resetDelay);
-
-        ResetStateFlags(); // 👈 фикс
-
-        RetryLevel();
-    }
-
     public void OpenPauseMenu()
     {
-        if (isMenuShown || isWaitingForPause || isWaitingForReset)
+        if (IsMenuBusy())
             return;
 
-        isMenuShown = true;
-        isPaused = true;
-
-        if (resumeButton != null)
-            resumeButton.SetActive(true);
-
-        if (deathMenu != null)
-            deathMenu.SetActive(true);
-
+        ShowMenu(true);
         Time.timeScale = 0f;
     }
 
@@ -129,41 +86,32 @@ public class DeathMenuUI : MonoBehaviour
 
     public void ClosePauseMenuOnly()
     {
-        ResetStateFlags(); // 👈 аккуратно заменили
-
-        if (deathMenu != null)
-            deathMenu.SetActive(false);
-
-        if (resumeButton != null)
-            resumeButton.SetActive(false);
-
+        ResetStateFlags();
+        HideMenu();
         Time.timeScale = 1f;
     }
 
     public void RetryLevel()
     {
-        ResetStateFlags(); // 👈 фикс
-
-        PracticeModeActive = false;
-        Time.timeScale = 1f;
+        RaceMultiplayerBootstrap.ClearMode();
+        RaceOnlineSessionManager.Shutdown();
+        PrepareSceneLoad(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void BackToMenu()
     {
-        ResetStateFlags(); // 👈 безопасно
-
-        PracticeModeActive = false;
-        Time.timeScale = 1f;
+        RaceMultiplayerBootstrap.ClearMode();
+        RaceOnlineSessionManager.Shutdown();
+        PrepareSceneLoad(false);
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
     public void OpenLevelSelect()
     {
-        ResetStateFlags(); // 👈 безопасно
-
-        PracticeModeActive = false;
-        Time.timeScale = 1f;
+        RaceMultiplayerBootstrap.ClearMode();
+        RaceOnlineSessionManager.Shutdown();
+        PrepareSceneLoad(false);
         SceneManager.LoadScene(levelSelectSceneName);
     }
 
@@ -172,27 +120,14 @@ public class DeathMenuUI : MonoBehaviour
         if (isWaitingForReset)
             return;
 
-        StopAllCoroutines(); // 👈 фикс зависших корутин
-        ResetStateFlags();   // 👈 фикс состояния
+        StopAllCoroutines();
+        ResetStateFlags();
 
         PracticeModeActive = false;
         SkipDeathMenu = true;
         Time.timeScale = 1f;
+
         StartCoroutine(ResetFromMenuDelay());
-    }
-
-    private IEnumerator ResetFromMenuDelay()
-    {
-        isWaitingForReset = true;
-
-        if (deathMenu != null)
-            deathMenu.SetActive(false);
-
-        yield return new WaitForSeconds(resetDelay);
-
-        ResetStateFlags(); // 👈 фикс
-
-        RetryLevel();
     }
 
     public void EnableDeathMenuAgain()
@@ -202,26 +137,13 @@ public class DeathMenuUI : MonoBehaviour
 
     public void StartPracticeMode()
     {
-        ResetStateFlags(); // 👈 безопасно
+        ResetStateFlags();
 
         PracticeModeActive = true;
         SkipDeathMenu = false;
         Time.timeScale = 1f;
+
         StartCoroutine(StartPracticeModeDelay());
-    }
-
-    private IEnumerator StartPracticeModeDelay()
-    {
-        isWaitingForReset = true;
-
-        if (deathMenu != null)
-            deathMenu.SetActive(false);
-
-        yield return new WaitForSeconds(resetDelay);
-
-        ResetStateFlags(); // 👈 фикс
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public static void DisablePracticeMode()
@@ -231,22 +153,98 @@ public class DeathMenuUI : MonoBehaviour
 
     public void ShowPracticeCompleteMenu()
     {
-        if (isMenuShown || isWaitingForPause || isWaitingForReset)
+        if (IsMenuBusy())
             return;
 
         PracticeModeActive = false;
+        ShowMenu(false);
+        Time.timeScale = 0f;
+    }
 
+    private IEnumerator PauseAfterDeathDelay()
+    {
+        yield return new WaitForSeconds(deathPauseDelay);
+
+        Time.timeScale = 0f;
+        isWaitingForPause = false;
+    }
+
+    private IEnumerator ResetAfterDeathDelay()
+    {
+        isWaitingForReset = true;
+
+        yield return new WaitForSeconds(resetDelay);
+
+        RetryLevel();
+    }
+
+    private IEnumerator ResetFromMenuDelay()
+    {
+        isWaitingForReset = true;
+        SetDeathMenuVisible(false);
+
+        yield return new WaitForSeconds(resetDelay);
+
+        RetryLevel();
+    }
+
+    private IEnumerator StartPracticeModeDelay()
+    {
+        isWaitingForReset = true;
+        SetDeathMenuVisible(false);
+
+        yield return new WaitForSeconds(resetDelay);
+
+        ResetStateFlags();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private bool IsMenuBusy()
+    {
+        return isMenuShown || isWaitingForPause || isWaitingForReset;
+    }
+
+    private void ShowMenu(bool showResumeButton)
+    {
         isMenuShown = true;
-        isPaused = false;
+        isPaused = showResumeButton;
         isWaitingForPause = false;
         isWaitingForReset = false;
 
-        if (resumeButton != null)
-            resumeButton.SetActive(false);
+        SetResumeButtonVisible(showResumeButton);
+        SetDeathMenuVisible(true);
+    }
 
+    private void HideMenu()
+    {
+        SetDeathMenuVisible(false);
+        SetResumeButtonVisible(false);
+    }
+
+    private void SetDeathMenuVisible(bool value)
+    {
         if (deathMenu != null)
-            deathMenu.SetActive(true);
+            deathMenu.SetActive(value);
+    }
 
-        Time.timeScale = 0f;
+    private void SetResumeButtonVisible(bool value)
+    {
+        if (resumeButton != null)
+            resumeButton.SetActive(value);
+    }
+
+    private void PrepareSceneLoad(bool practiceModeActive)
+    {
+        ResetStateFlags();
+        PracticeModeActive = practiceModeActive;
+        Time.timeScale = 1f;
+    }
+
+    private void ResetStateFlags()
+    {
+        isMenuShown = false;
+        isPaused = false;
+        isWaitingForPause = false;
+        isWaitingForReset = false;
     }
 }

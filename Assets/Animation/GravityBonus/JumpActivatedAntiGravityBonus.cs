@@ -57,8 +57,8 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
 
     private bool IsJumpPressed()
     {
-        return Input.GetKeyDown(jumpKey1) ||
-               Input.GetKeyDown(jumpKey2);
+        return GameInput.WasKeyPressedThisFrame(jumpKey1) ||
+               GameInput.WasKeyPressedThisFrame(jumpKey2);
     }
 
     private void ActivateBonus()

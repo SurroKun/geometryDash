@@ -66,10 +66,12 @@ public class SpecialSkinAnimatorBridge : MonoBehaviour
         if (lastGrounded && !grounded && verticalSpeed > 0.05f)
             SetTriggerIfExists(jumpTrigger);
 
-        // Left / Right / Dash triggers from input
-        bool leftPressed = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
-        bool rightPressed = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
-        bool dashPressed = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+        bool leftPressed = GameInput.IsKeyHeld(KeyCode.A) ||
+                           GameInput.IsKeyHeld(KeyCode.LeftArrow);
+        bool rightPressed = GameInput.IsKeyHeld(KeyCode.D) ||
+                            GameInput.IsKeyHeld(KeyCode.RightArrow);
+        bool dashPressed = GameInput.IsKeyHeld(KeyCode.S) ||
+                           GameInput.IsKeyHeld(KeyCode.DownArrow);
 
         if (leftPressed && !lastLeftPressed)
             SetTriggerIfExists(leftTrigger);

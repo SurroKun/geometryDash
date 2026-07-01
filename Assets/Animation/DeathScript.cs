@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class DeathScript : MonoBehaviour
 {
+    private const string SpeedLossDeathMessage = "Dead from speed loss";
+    private const string CollisionDeathMessage = "Dead from collision";
+
     [Header("Death Settings")]
     public float minSpeedToSurvive = 4f;
     public float deathDelay = 0.15f;
@@ -37,47 +40,70 @@ public class DeathScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDead) return;
-        if (rb == null) return;
+        if (isDead)
+            return;
 
-        float currentZ = rb.position.z;
-        float speed = Mathf.Abs((currentZ - lastZ) / Time.fixedDeltaTime);
-        lastZ = currentZ;
+        if (rb == null)
+            return;
+
+        float speed = CalculateForwardSpeed();
 
         if (speed < minSpeedToSurvive)
-        {
-            slowTimer += Time.fixedDeltaTime;
-
-            if (slowTimer >= deathDelay)
-                DieFromSpeedLoss();
-        }
+            TickSlowDeathTimer();
         else
-        {
-            slowTimer = 0f;
-        }
+            ResetSlowDeathTimer();
     }
 
     public void DieFromSpeedLoss()
     {
-        if (isDead) return;
+        if (isDead)
+            return;
 
-        isDead = true;
-        Debug.Log("Dead from speed loss");
-        KillPlayer();
+        Die(SpeedLossDeathMessage, false);
     }
 
     public void DieFromCollision()
     {
-        if (isDead) return;
+        if (isDead)
+            return;
 
+        Die(CollisionDeathMessage, true);
+    }
+
+    private void Die(string logMessage, bool resetSlowTimer)
+    {
         isDead = true;
-        slowTimer = 0f;
 
-        Debug.Log("Dead from collision");
+        if (resetSlowTimer)
+            ResetSlowDeathTimer();
+
+        Debug.Log(logMessage);
         KillPlayer();
     }
 
-    void KillPlayer()
+    private float CalculateForwardSpeed()
+    {
+        float currentZ = rb.position.z;
+        float speed = Mathf.Abs((currentZ - lastZ) / Time.fixedDeltaTime);
+        lastZ = currentZ;
+
+        return speed;
+    }
+
+    private void TickSlowDeathTimer()
+    {
+        slowTimer += Time.fixedDeltaTime;
+
+        if (slowTimer >= deathDelay)
+            DieFromSpeedLoss();
+    }
+
+    private void ResetSlowDeathTimer()
+    {
+        slowTimer = 0f;
+    }
+
+    private void KillPlayer()
     {
         if (trail != null)
             trail.StopTrail();
@@ -85,26 +111,51 @@ public class DeathScript : MonoBehaviour
         if (playerMove != null)
             playerMove.enabled = false;
 
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-        }
+        FreezeRigidbody();
 
         if (deathEffect != null)
             deathEffect.Explode();
 
+        HandleDeathFlow();
+    }
+
+    private void FreezeRigidbody()
+    {
+        if (rb == null)
+            return;
+
+        ZeroRigidbodyMotion();
+        rb.isKinematic = true;
+    }
+
+    private void UnfreezeRigidbody()
+    {
+        if (rb == null)
+            return;
+
+        rb.isKinematic = false;
+        ZeroRigidbodyMotion();
+        lastZ = rb.position.z;
+    }
+
+    private void ZeroRigidbodyMotion()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    private void HandleDeathFlow()
+    {
         if (DeathMenuUI.PracticeModeActive)
         {
             if (practiceModeManager != null)
                 practiceModeManager.RespawnFromCheckpoint();
+
+            return;
         }
-        else
-        {
-            if (deathMenuUI != null)
-                deathMenuUI.ShowDeathMenu();
-        }
+
+        if (deathMenuUI != null)
+            deathMenuUI.ShowDeathMenu();
     }
 
     public bool IsDead()
@@ -115,14 +166,7 @@ public class DeathScript : MonoBehaviour
     public void ResetDeathState()
     {
         isDead = false;
-        slowTimer = 0f;
-
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            lastZ = rb.position.z;
-        }
+        ResetSlowDeathTimer();
+        UnfreezeRigidbody();
     }
 }

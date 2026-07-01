@@ -111,7 +111,27 @@ public class LevelSelectManager : MonoBehaviour
         }
 
         Time.timeScale = 1f;
-        DeathMenuUI.DisablePracticeMode();
+
+        if (!RaceMultiplayerBootstrap.IsMultiplayerRequested())
+        {
+            DeathMenuUI.DisablePracticeMode();
+        }
+        else if (RaceOnlineSessionManager.IsOnlineRequested() &&
+                 Unity.Netcode.NetworkManager.Singleton != null &&
+                 Unity.Netcode.NetworkManager.Singleton.IsClient &&
+                 !Unity.Netcode.NetworkManager.Singleton.IsServer)
+        {
+            Debug.Log("Client waits for host level selection.");
+            return;
+        }
+
+        if (RaceOnlineSessionManager.IsOnlineRequested() &&
+            Unity.Netcode.NetworkManager.Singleton != null &&
+            Unity.Netcode.NetworkManager.Singleton.IsServer)
+        {
+            RaceNetworkLevelLoader.SendLoadLevelToClients(level.sceneName);
+        }
+
         SceneManager.LoadScene(level.sceneName);
     }
 
