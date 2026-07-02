@@ -8057,6 +8057,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7246947599715760047, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+      propertyPath: m_Weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246947599715760047, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: m_TranslationAtRest.x
       value: -10.28
       objectReference: {fileID: 0}
