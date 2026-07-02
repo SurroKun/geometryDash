@@ -25,13 +25,21 @@ public class PlayerMove : MonoBehaviour
     public float dashForce = 15f;
     public float jumpBufferTime = 0.15f;
     public float coyoteTime = 0.3f;
-    public float dashBufferTime = 0.15f;
+    public float dashBufferTime = 0.08f;
     public float fall = 1.55f;
+    public bool allowDashAfterAirJump = true;
+
+    [Header("Down Dash Jump Fix")]
+    public bool requireGroundAfterDownDashBeforeJump = true;
+    public bool queueJumpAfterDownDash = true;
+    public float postDownDashLandingJumpDelay = 0.04f;
+    public bool downDashOnlyOnPress = true;
+    public bool allowAirJumpDuringDownDash = true;
 
     [Header("Dash Cooldown")]
     public float dashCooldown = 0.22f;
     public bool blockJumpRightAfterDash = true;
-    public float jumpBlockAfterDash = 0.08f;
+    public float jumpBlockAfterDash = 0.02f;
 
     [Header("Dash Fix")]
     public bool resetDashWhenTouchGround = true;
@@ -67,6 +75,7 @@ public class PlayerMove : MonoBehaviour
 
     [Header("References")]
     public Animator anim;
+    public RunnerCameraFollow cameraFollow;
 
     private PlayerGravityFlip gravityFlip;
     private PlayerJumpSpeedDashBonus speedDashBonus;
@@ -83,11 +92,15 @@ public class PlayerMove : MonoBehaviour
     private bool hasDashedInAir = false;
     private bool isGrounded = false;
 
+    private bool waitingForGroundAfterDownDash = false;
+    private bool queuedJumpAfterDownDash = false;
+
     private float jumpBufferCounter;
     private float coyoteTimeCounter;
     private float dashBufferCounter;
     private float dashCooldownTimer = 0f;
     private float jumpBlockAfterDashTimer = 0f;
+    private float postDownDashLandingJumpTimer = 0f;
 
     private GameObject currentAirJumpObject;
     private float sideInputBlockTimer = 0f;
@@ -123,6 +136,8 @@ public class PlayerMove : MonoBehaviour
 
         startX = rb.position.x;
         currentX = startX;
+
+        NotifyCameraLaneChanged();
 
         flightStartX = rb.position.x;
         flightStartY = rb.position.y;
@@ -222,16 +237,73 @@ public class PlayerMove : MonoBehaviour
     {
         bool jumpHeld = IsJumpHeld();
 
+        if (waitingForGroundAfterDownDash && !isGrounded)
+        {
+            if (jumpHeld &&
+                speedDashBonus != null &&
+                speedDashBonus.TryUseSpeedDash())
+            {
+                jumpBufferCounter = 0f;
+                return;
+            }
+
+            if (jumpHeld &&
+                allowAirJumpDuringDownDash &&
+                canAirJump)
+            {
+                if (cancelSpeedDashBeforeAirJump)
+                    CancelSpeedDashIfActive();
+
+                PerformJump();
+                ClearAirJump();
+
+                waitingForGroundAfterDownDash = false;
+                queuedJumpAfterDownDash = false;
+
+                if (!allowDashAfterAirJump)
+                    hasDashedInAir = true;
+
+                hasJumpedThisAir = true;
+                isGrounded = false;
+
+                return;
+            }
+
+            if (jumpHeld && queueJumpAfterDownDash)
+                queuedJumpAfterDownDash = true;
+
+            jumpBufferCounter = 0f;
+            return;
+        }
+
+        if (postDownDashLandingJumpTimer > 0f)
+        {
+            if (jumpHeld && queueJumpAfterDownDash)
+                queuedJumpAfterDownDash = true;
+
+            jumpBufferCounter = 0f;
+            return;
+        }
+
+        if (queuedJumpAfterDownDash && isGrounded)
+        {
+            queuedJumpAfterDownDash = false;
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else if (jumpHeld)
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
         if (blockJumpRightAfterDash && jumpBlockAfterDashTimer > 0f)
         {
             jumpBufferCounter = 0f;
             return;
         }
-
-        if (jumpHeld)
-            jumpBufferCounter = jumpBufferTime;
-        else
-            jumpBufferCounter -= Time.deltaTime;
 
         if (jumpHeld &&
             speedDashBonus != null &&
@@ -255,6 +327,7 @@ public class PlayerMove : MonoBehaviour
 
             coyoteTimeCounter = 0f;
             hasJumpedThisAir = true;
+            isGrounded = false;
         }
         else if (canAirJump)
         {
@@ -263,6 +336,11 @@ public class PlayerMove : MonoBehaviour
 
             PerformJump();
             ClearAirJump();
+
+            if (!allowDashAfterAirJump)
+                hasDashedInAir = true;
+
+            isGrounded = false;
         }
     }
 
@@ -280,6 +358,7 @@ public class PlayerMove : MonoBehaviour
     private void PerformJump()
     {
         SetVerticalVelocity(0f);
+
         rb.AddForce(
             Vector3.up * jumpForce * GetGravityDirection(),
             ForceMode.Impulse
@@ -353,11 +432,11 @@ public class PlayerMove : MonoBehaviour
 
     void HandleDashInput()
     {
-        bool dashPressed = IsDashPressed();
+        bool dashInput = downDashOnlyOnPress
+            ? IsDashPressed()
+            : IsDashPressed() || IsDashHeld();
 
-        bool dashHeld = IsDashHeld();
-
-        if (dashPressed || dashHeld)
+        if (dashInput)
             dashBufferCounter = dashBufferTime;
         else
             dashBufferCounter -= Time.deltaTime;
@@ -368,6 +447,17 @@ public class PlayerMove : MonoBehaviour
         CancelSpeedDashIfActive();
 
         SetVerticalVelocity(dashForce * -GetGravityDirection());
+
+        if (requireGroundAfterDownDashBeforeJump)
+        {
+            waitingForGroundAfterDownDash = true;
+            queuedJumpAfterDownDash = IsJumpHeld() && queueJumpAfterDownDash;
+        }
+
+        currentAirJumpObject = null;
+
+        if (!allowAirJumpDuringDownDash)
+            canAirJump = false;
 
         dashCooldownTimer = dashCooldown;
 
@@ -382,6 +472,7 @@ public class PlayerMove : MonoBehaviour
 
         hasDashedInAir = true;
         hasJumpedThisAir = true;
+        isGrounded = false;
 
         PlayDashAnimation();
     }
@@ -541,6 +632,14 @@ public class PlayerMove : MonoBehaviour
         {
             isGrounded = true;
 
+            if (waitingForGroundAfterDownDash)
+            {
+                waitingForGroundAfterDownDash = false;
+                postDownDashLandingJumpTimer = postDownDashLandingJumpDelay;
+                SetVerticalVelocity(0f);
+                dashBufferCounter = 0f;
+            }
+
             coyoteTimeCounter = coyoteTime;
             canAirJump = false;
 
@@ -597,6 +696,8 @@ public class PlayerMove : MonoBehaviour
         Vector3 pos = rb.position;
         pos.x = currentX;
         rb.position = pos;
+
+        NotifyCameraLaneChanged();
     }
 
     public void ResetAfterRespawn(float respawnX)
@@ -681,6 +782,8 @@ public class PlayerMove : MonoBehaviour
         step = Mathf.RoundToInt(rawStep);
         step = Mathf.Clamp(step, -maxSteps, maxSteps);
 
+        NotifyCameraLaneChanged();
+
         return startX + step * stepSize;
     }
 
@@ -761,6 +864,7 @@ public class PlayerMove : MonoBehaviour
         TickTimer(ref sideInputBlockTimer);
         TickTimer(ref dashCooldownTimer);
         TickTimer(ref jumpBlockAfterDashTimer);
+        TickTimer(ref postDownDashLandingJumpTimer);
     }
 
     private void TickTimer(ref float timer)
@@ -778,13 +882,21 @@ public class PlayerMove : MonoBehaviour
     private void MoveLaneLeft()
     {
         step++;
+        NotifyCameraLaneChanged();
         SetAnimatorTrigger(LeftTrigger);
     }
 
     private void MoveLaneRight()
     {
         step--;
+        NotifyCameraLaneChanged();
         SetAnimatorTrigger(RightTrigger);
+    }
+
+    private void NotifyCameraLaneChanged()
+    {
+        if (cameraFollow != null)
+            cameraFollow.SetLane(-step);
     }
 
     private void SetAnimatorTrigger(string triggerName)
@@ -800,9 +912,12 @@ public class PlayerMove : MonoBehaviour
         dashBufferCounter = 0f;
         dashCooldownTimer = 0f;
         jumpBlockAfterDashTimer = 0f;
+        postDownDashLandingJumpTimer = 0f;
 
         hasJumpedThisAir = false;
         hasDashedInAir = false;
+        waitingForGroundAfterDownDash = false;
+        queuedJumpAfterDownDash = false;
 
         canAirJump = false;
         currentAirJumpObject = null;

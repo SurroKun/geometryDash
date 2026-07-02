@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class PlayerJumpSpeedDashBonus : MonoBehaviour
 {
+    [Header("Keys")]
+    public KeyCode jumpKey1 = KeyCode.W;
+    public KeyCode jumpKey2 = KeyCode.UpArrow;
+
+    [Header("Input Buffer")]
+    public float jumpBufferTime = 0.18f;
+    public bool allowBufferedPressBeforeEnter = true;
+
     [Header("Respawn Protection")]
     public float triggerIgnoreAfterRespawn = 0.2f;
 
@@ -23,6 +31,7 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
 
     private float cooldownTimer = 0f;
     private float ignoreTriggerTimer = 0f;
+    private float jumpBufferTimer = 0f;
 
     private Coroutine dashCoroutine;
 
@@ -32,20 +41,47 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
 
     private bool isDashing = false;
 
-    void Start()
+    private void Start()
     {
         playerMove = GetComponent<PlayerMove>();
         gravityFlip = GetComponent<PlayerGravityFlip>();
         rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    private void Update()
+    {
+        UpdateTimers();
+        UpdateJumpBuffer();
+
+        if (insideDashZone && jumpBufferTimer > 0f)
+            TryUseSpeedDash();
+    }
+
+    private void UpdateTimers()
     {
         if (cooldownTimer > 0f)
             cooldownTimer -= Time.deltaTime;
 
         if (ignoreTriggerTimer > 0f)
             ignoreTriggerTimer -= Time.deltaTime;
+    }
+
+    private void UpdateJumpBuffer()
+    {
+        if (IsJumpPressed())
+        {
+            jumpBufferTimer = jumpBufferTime;
+            return;
+        }
+
+        if (jumpBufferTimer > 0f)
+            jumpBufferTimer -= Time.deltaTime;
+    }
+
+    private bool IsJumpPressed()
+    {
+        return GameInput.WasKeyPressedThisFrame(jumpKey1) ||
+               GameInput.WasKeyPressedThisFrame(jumpKey2);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,6 +95,12 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
             insideDashZone = true;
             currentZone = zone;
             usedThisEnter = false;
+
+            if (allowBufferedPressBeforeEnter &&
+                jumpBufferTimer > 0f)
+            {
+                TryUseSpeedDash();
+            }
         }
     }
 
@@ -78,6 +120,7 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
 
     public bool TryUseSpeedDash()
     {
+        if (jumpBufferTimer <= 0f) return false;
         if (ignoreTriggerTimer > 0f) return false;
         if (!insideDashZone || currentZone == null) return false;
         if (cooldownTimer > 0f) return false;
@@ -86,6 +129,7 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
 
         usedThisEnter = true;
         cooldownTimer = cooldown;
+        jumpBufferTimer = 0f;
 
         StartSpeedDash(
             currentZone.dashSpeedMultiplier,
@@ -198,6 +242,7 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
         insideDashZone = false;
         currentZone = null;
         usedThisEnter = false;
+        jumpBufferTimer = 0f;
         cooldownTimer = 0f;
         ignoreTriggerTimer = triggerIgnoreAfterRespawn;
     }

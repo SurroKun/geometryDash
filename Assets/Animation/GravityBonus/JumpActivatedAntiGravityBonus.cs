@@ -20,6 +20,7 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
 
     [Header("Timing")]
     public float jumpBufferTime = 0.18f;
+    public bool allowBufferedPressBeforeEnter = true;
 
     [Header("Settings")]
     public bool oneUsePerEnter = true;
@@ -36,13 +37,36 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
 
     private void Update()
     {
-        if (IsJumpPressed())
-            jumpBufferTimer = jumpBufferTime;
-        else if (jumpBufferTimer > 0f)
-            jumpBufferTimer -= Time.deltaTime;
+        UpdateJumpBuffer();
 
-        if (!playerInside ||
-            currentGravityFlip == null ||
+        if (!playerInside)
+            return;
+
+        if (jumpBufferTimer > 0f)
+            TryActivateBonus();
+    }
+
+    private void UpdateJumpBuffer()
+    {
+        if (IsJumpPressed())
+        {
+            jumpBufferTimer = jumpBufferTime;
+            return;
+        }
+
+        if (jumpBufferTimer > 0f)
+            jumpBufferTimer -= Time.deltaTime;
+    }
+
+    private bool IsJumpPressed()
+    {
+        return GameInput.WasKeyPressedThisFrame(jumpKey1) ||
+               GameInput.WasKeyPressedThisFrame(jumpKey2);
+    }
+
+    private void TryActivateBonus()
+    {
+        if (currentGravityFlip == null ||
             currentRb == null)
         {
             return;
@@ -51,14 +75,10 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
         if (oneUsePerEnter && usedThisEnter)
             return;
 
-        if (jumpBufferTimer > 0f)
-            ActivateBonus();
-    }
+        if (jumpBufferTimer <= 0f)
+            return;
 
-    private bool IsJumpPressed()
-    {
-        return GameInput.WasKeyPressedThisFrame(jumpKey1) ||
-               GameInput.WasKeyPressedThisFrame(jumpKey2);
+        ActivateBonus();
     }
 
     private void ActivateBonus()
@@ -237,6 +257,12 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
 
             playerInside = true;
             usedThisEnter = false;
+
+            if (allowBufferedPressBeforeEnter &&
+                jumpBufferTimer > 0f)
+            {
+                TryActivateBonus();
+            }
         }
     }
 
@@ -259,7 +285,6 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
 
             playerInside = false;
             usedThisEnter = false;
-            jumpBufferTimer = 0f;
         }
     }
 }

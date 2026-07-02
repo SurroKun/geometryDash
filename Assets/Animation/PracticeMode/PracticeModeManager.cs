@@ -16,18 +16,21 @@ public class PracticeModeManager : MonoBehaviour
         public Vector3 position;
         public bool jumpBoostActive;
         public bool gravityInverted;
+        public bool cameraGravityInverted;
         public bool speedBoostActive;
 
         public PracticeCheckpointData(
             Vector3 position,
             bool jumpBoostActive,
             bool gravityInverted,
+            bool cameraGravityInverted,
             bool speedBoostActive
         )
         {
             this.position = position;
             this.jumpBoostActive = jumpBoostActive;
             this.gravityInverted = gravityInverted;
+            this.cameraGravityInverted = cameraGravityInverted;
             this.speedBoostActive = speedBoostActive;
         }
     }
@@ -42,6 +45,7 @@ public class PracticeModeManager : MonoBehaviour
     public PlayerJumpHeightBonus jumpHeightBonus;
     public PlayerSpeedBoostBonus speedBoostBonus;
     public PlayerGravityFlip gravityFlip;
+    public RunnerCameraFollow cameraFollow;
     public PlayerSkinVFXController skinVFXController;
     public SkinAnimatorModeController skinAnimatorModeController;
     public SkinRollVisualController skinRollVisualController;
@@ -86,6 +90,7 @@ public class PracticeModeManager : MonoBehaviour
 
     private bool hasPendingGravityState = false;
     private bool pendingGravityState = false;
+    private bool pendingCameraGravityState = false;
 
     private bool temporaryGravityBonusWasUsed = false;
 
@@ -122,6 +127,9 @@ public class PracticeModeManager : MonoBehaviour
         if (gravityFlip == null)
             gravityFlip = GetComponent<PlayerGravityFlip>();
 
+        if (cameraFollow == null && gravityFlip != null)
+            cameraFollow = gravityFlip.cameraFollow;
+
         if (skinVFXController == null)
             skinVFXController = GetComponent<PlayerSkinVFXController>();
 
@@ -155,13 +163,9 @@ public class PracticeModeManager : MonoBehaviour
         }
 
         if (checkpointSpawnMode == CheckpointSpawnMode.Timer)
-        {
             HandleTimerCheckpointMode();
-        }
         else
-        {
             HandleJumpCountCheckpointMode();
-        }
     }
 
     private void HandleTimerCheckpointMode()
@@ -172,15 +176,8 @@ public class PracticeModeManager : MonoBehaviour
         {
             checkpointTimer = 0f;
 
-            if (allowCheckpointsInAir)
-            {
+            if (allowCheckpointsInAir || IsGroundedSafe())
                 SaveCheckpoint(player.position, true);
-            }
-            else
-            {
-                if (IsGroundedSafe())
-                    SaveCheckpoint(player.position, true);
-            }
         }
     }
 
@@ -267,6 +264,7 @@ public class PracticeModeManager : MonoBehaviour
 
         bool jumpBoostState = false;
         bool gravityState = false;
+        bool cameraGravityState = false;
         bool speedBoostState = false;
 
         if (jumpHeightBonus != null)
@@ -274,6 +272,11 @@ public class PracticeModeManager : MonoBehaviour
 
         if (gravityFlip != null)
             gravityState = gravityFlip.IsGravityInverted();
+
+        if (cameraFollow != null)
+            cameraGravityState = cameraFollow.IsCameraGravityInverted();
+        else
+            cameraGravityState = gravityState;
 
         if (speedBoostBonus != null)
             speedBoostState = speedBoostBonus.IsBoosted();
@@ -283,12 +286,15 @@ public class PracticeModeManager : MonoBehaviour
             forceNormalGravityAfterTemporaryBonus)
         {
             gravityState = false;
+            cameraGravityState = false;
             hasPendingGravityState = false;
             pendingGravityState = false;
+            pendingCameraGravityState = false;
         }
         else if (hasPendingGravityState)
         {
             gravityState = pendingGravityState;
+            cameraGravityState = pendingCameraGravityState;
             hasPendingGravityState = false;
         }
 
@@ -311,6 +317,7 @@ public class PracticeModeManager : MonoBehaviour
                 checkpointPos,
                 jumpBoostState,
                 gravityState,
+                cameraGravityState,
                 speedBoostState
             )
         );
@@ -329,6 +336,7 @@ public class PracticeModeManager : MonoBehaviour
             "Practice checkpoint saved: " + checkpointPos +
             " | JumpBoost: " + jumpBoostState +
             " | GravityInverted: " + gravityState +
+            " | CameraGravityInverted: " + cameraGravityState +
             " | SpeedBoost: " + speedBoostState +
             " | JumpCounter: " + jumpCounter
         );
@@ -418,9 +426,12 @@ public class PracticeModeManager : MonoBehaviour
 
         if (gravityFlip != null)
         {
-            gravityFlip.SnapGravityState(checkpoint.gravityInverted);
+            gravityFlip.SnapGravityState(checkpoint.gravityInverted, false);
             gravityFlip.IgnoreTriggersAfterRespawn();
         }
+
+        if (cameraFollow != null)
+            cameraFollow.SetCameraGravityInverted(checkpoint.cameraGravityInverted);
 
         if (jumpHeightBonus != null)
         {
@@ -493,6 +504,7 @@ public class PracticeModeManager : MonoBehaviour
     {
         hasPendingGravityState = false;
         pendingGravityState = false;
+        pendingCameraGravityState = false;
         temporaryGravityBonusWasUsed = false;
     }
 
@@ -528,6 +540,7 @@ public class PracticeModeManager : MonoBehaviour
             currentCheckpoint.position +
             " | JumpBoost: " + currentCheckpoint.jumpBoostActive +
             " | GravityInverted: " + currentCheckpoint.gravityInverted +
+            " | CameraGravityInverted: " + currentCheckpoint.cameraGravityInverted +
             " | SpeedBoost: " + currentCheckpoint.speedBoostActive
         );
     }
@@ -554,6 +567,7 @@ public class PracticeModeManager : MonoBehaviour
 
         hasPendingGravityState = true;
         pendingGravityState = newGravityState;
+        pendingCameraGravityState = newGravityState;
 
         Debug.Log(
             "Pending gravity stored for next checkpoint: " +
@@ -570,6 +584,7 @@ public class PracticeModeManager : MonoBehaviour
 
         hasPendingGravityState = false;
         pendingGravityState = false;
+        pendingCameraGravityState = false;
 
         Debug.Log(
             "Temporary gravity bonus used. Practice checkpoints will save normal gravity."

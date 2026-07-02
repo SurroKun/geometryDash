@@ -7,6 +7,7 @@ public class PlayerGravityFlip : MonoBehaviour
     public Rigidbody rb;
     public PlayerMove playerMove;
     public Transform cameraPivot;
+    public RunnerCameraFollow cameraFollow;
     public PracticeModeManager practiceModeManager;
 
     [Header("Gravity")]
@@ -42,7 +43,7 @@ public class PlayerGravityFlip : MonoBehaviour
         return ignoreTriggerTimer <= 0f && !isFlipping;
     }
 
-    void Start()
+    private void Start()
     {
         if (rb == null)
             rb = GetComponent<Rigidbody>();
@@ -57,13 +58,13 @@ public class PlayerGravityFlip : MonoBehaviour
             rb.useGravity = false;
     }
 
-    void Update()
+    private void Update()
     {
         if (ignoreTriggerTimer > 0f)
             ignoreTriggerTimer -= Time.deltaTime;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (rb == null || gravityPaused)
             return;
@@ -77,7 +78,7 @@ public class PlayerGravityFlip : MonoBehaviour
         if (!CanTriggerGravity())
             return false;
 
-        StartCoroutine(SmoothFlip(true));
+        StartCoroutine(SmoothFlip(true, true));
         return true;
     }
 
@@ -86,11 +87,14 @@ public class PlayerGravityFlip : MonoBehaviour
         if (!CanTriggerGravity())
             return false;
 
-        StartCoroutine(SmoothFlip(false));
+        StartCoroutine(SmoothFlip(false, false));
         return true;
     }
 
-    IEnumerator SmoothFlip(bool changeSideInput)
+    private IEnumerator SmoothFlip(
+        bool changeSideInput,
+        bool changeCamera
+    )
     {
         isFlipping = true;
         gravityPaused = true;
@@ -102,6 +106,9 @@ public class PlayerGravityFlip : MonoBehaviour
 
         if (practiceModeManager != null)
             practiceModeManager.NotifyGravityChanged(isGravityInverted);
+
+        if (changeCamera && cameraFollow != null)
+            cameraFollow.SetCameraGravityInverted(isGravityInverted);
 
         if (rb != null)
         {
@@ -129,7 +136,9 @@ public class PlayerGravityFlip : MonoBehaviour
         }
 
         float elapsed = 0f;
-        float totalDuration = Mathf.Max(visualRotateDuration, cameraRotateDuration);
+        float totalDuration = changeCamera
+            ? Mathf.Max(visualRotateDuration, cameraRotateDuration)
+            : visualRotateDuration;
 
         while (elapsed < totalDuration)
         {
@@ -137,16 +146,32 @@ public class PlayerGravityFlip : MonoBehaviour
 
             if (rotatePlayerVisual && visualTarget != null)
             {
-                float visualT = visualRotateDuration > 0f ? Mathf.Clamp01(elapsed / visualRotateDuration) : 1f;
+                float visualT = visualRotateDuration > 0f
+                    ? Mathf.Clamp01(elapsed / visualRotateDuration)
+                    : 1f;
+
                 visualT = Mathf.SmoothStep(0f, 1f, visualT);
-                visualTarget.rotation = Quaternion.Lerp(startVisualRot, endVisualRot, visualT);
+
+                visualTarget.rotation = Quaternion.Lerp(
+                    startVisualRot,
+                    endVisualRot,
+                    visualT
+                );
             }
 
-            if (cameraPivot != null)
+            if (changeCamera && cameraPivot != null)
             {
-                float cameraT = cameraRotateDuration > 0f ? Mathf.Clamp01(elapsed / cameraRotateDuration) : 1f;
+                float cameraT = cameraRotateDuration > 0f
+                    ? Mathf.Clamp01(elapsed / cameraRotateDuration)
+                    : 1f;
+
                 cameraT = Mathf.SmoothStep(0f, 1f, cameraT);
-                cameraPivot.rotation = Quaternion.Lerp(startCameraRot, endCameraRot, cameraT);
+
+                cameraPivot.rotation = Quaternion.Lerp(
+                    startCameraRot,
+                    endCameraRot,
+                    cameraT
+                );
             }
 
             if (gravityPaused && elapsed >= gravityPauseTime)
@@ -158,7 +183,7 @@ public class PlayerGravityFlip : MonoBehaviour
         if (rotatePlayerVisual && visualTarget != null)
             visualTarget.rotation = endVisualRot;
 
-        if (cameraPivot != null)
+        if (changeCamera && cameraPivot != null)
             cameraPivot.rotation = endCameraRot;
 
         gravityPaused = false;
@@ -166,6 +191,11 @@ public class PlayerGravityFlip : MonoBehaviour
     }
 
     public void SnapGravityState(bool value)
+    {
+        SnapGravityState(value, true);
+    }
+
+    public void SnapGravityState(bool value, bool syncCamera)
     {
         StopAllCoroutines();
 
@@ -176,6 +206,9 @@ public class PlayerGravityFlip : MonoBehaviour
         if (playerMove != null)
             playerMove.SetSideInputInverted(isGravityInverted);
 
+        if (syncCamera && cameraFollow != null)
+            cameraFollow.SetCameraGravityInverted(isGravityInverted);
+
         float targetZ = isGravityInverted ? 180f : 0f;
         Quaternion targetRot = Quaternion.Euler(0f, 0f, targetZ);
 
@@ -184,14 +217,18 @@ public class PlayerGravityFlip : MonoBehaviour
         if (rotatePlayerVisual && visualTarget != null)
             visualTarget.rotation = targetRot;
 
-        if (cameraPivot != null)
+        if (syncCamera && cameraPivot != null)
             cameraPivot.rotation = targetRot;
 
         if (rb != null)
         {
             rb.useGravity = false;
             rb.angularVelocity = Vector3.zero;
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                0f,
+                rb.linearVelocity.z
+            );
         }
     }
 
