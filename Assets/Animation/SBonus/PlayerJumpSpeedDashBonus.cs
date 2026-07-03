@@ -11,6 +11,10 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
     public float jumpBufferTime = 0.18f;
     public bool allowBufferedPressBeforeEnter = true;
 
+    [Header("VFX")]
+    public GameObject activationEffectPrefab;
+    public Vector3 effectOffset = Vector3.zero;
+
     [Header("Respawn Protection")]
     public float triggerIgnoreAfterRespawn = 0.2f;
 
@@ -131,6 +135,8 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
         cooldownTimer = cooldown;
         jumpBufferTimer = 0f;
 
+        SpawnActivationEffect();
+
         StartSpeedDash(
             currentZone.dashSpeedMultiplier,
             currentZone.dashDuration,
@@ -138,6 +144,18 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
         );
 
         return true;
+    }
+
+    private void SpawnActivationEffect()
+    {
+        if (activationEffectPrefab == null || rb == null)
+            return;
+
+        Instantiate(
+            activationEffectPrefab,
+            rb.position + effectOffset,
+            Quaternion.identity
+        );
     }
 
     private void StartSpeedDash(
