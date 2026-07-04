@@ -2124,6 +2124,8 @@ GameObject:
   - component: {fileID: 7677028669691738491}
   - component: {fileID: 665856358087270260}
   - component: {fileID: 6746022535948996734}
+  - component: {fileID: 5804548299824540994}
+  - component: {fileID: 3575134424439774301}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Player
@@ -2413,7 +2415,7 @@ MonoBehaviour:
   jumpsBeforeCheckpoint: 5
   saveAfterLandingOnly: 1
   respawnDelay: 0.35
-  checkpointYOffset: 0.5
+  checkpointYOffset: 0
   checkpointMarkerPrefab: {fileID: 919132149155446097, guid: 8a19f65411ab8634ba8fff0f9c670909, type: 3}
   markerOffset: {x: 0, y: 0, z: 1}
   minCheckpointCount: 1
@@ -2759,6 +2761,41 @@ MonoBehaviour:
   ignoreVerticalMovement: 1
   invertDirection: 1
   usePositionDeltaSpeed: 1
+--- !u!114 &5804548299824540994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2424363180556079708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 400165b15ac0bba41bdcde8224466945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerJumpSpeedDashBonus
+  jumpKey1: 119
+  jumpKey2: 273
+  jumpBufferTime: 0.18
+  allowBufferedPressBeforeEnter: 1
+  activationEffectPrefab: {fileID: 0}
+  effectOffset: {x: 0, y: 0, z: 0}
+  triggerIgnoreAfterRespawn: 0.2
+  cooldown: 0.15
+  disableGravityFlipDuringDash: 0
+--- !u!114 &3575134424439774301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2424363180556079708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6825c5fa19c2df43ad225a377f6c511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpeedBoostBonus
+  speedMultiplier: 1.5
+  triggerIgnoreAfterRespawn: 0.2
 --- !u!1 &2750642110548478823
 GameObject:
   m_ObjectHideFlags: 0
