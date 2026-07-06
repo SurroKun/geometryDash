@@ -2,8 +2,19 @@ using UnityEngine;
 
 public class GravityFlipBonus : MonoBehaviour
 {
+    public enum RespawnGravityState
+    {
+        KeepCurrent,
+        ForceNormal,
+        ForceInverted
+    }
+
     [Header("Trigger Protection")]
     public float retriggerDelay = 0.15f;
+
+    [Header("Practice Respawn")]
+    public RespawnGravityState respawnState = RespawnGravityState.ForceInverted;
+    public bool syncCameraAfterRespawn = true;
 
     private float retriggerTimer = 0f;
 
@@ -35,5 +46,23 @@ public class GravityFlipBonus : MonoBehaviour
             return;
 
         retriggerTimer = retriggerDelay;
+    }
+
+    public void ApplyRespawnState(PlayerGravityFlip gravityFlip)
+    {
+        if (gravityFlip == null)
+            return;
+
+        if (respawnState == RespawnGravityState.KeepCurrent)
+            return;
+
+        bool invertedAfterRespawn =
+            respawnState == RespawnGravityState.ForceInverted;
+
+        gravityFlip.SnapGravityState(
+            invertedAfterRespawn,
+            invertedAfterRespawn,
+            syncCameraAfterRespawn
+        );
     }
 }
