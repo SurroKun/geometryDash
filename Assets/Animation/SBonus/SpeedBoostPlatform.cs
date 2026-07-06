@@ -2,6 +2,16 @@ using UnityEngine;
 
 public class SpeedBoostPlatform : MonoBehaviour
 {
+    public enum BonusPlatformMode
+    {
+        Toggle,
+        ForceOn,
+        ForceOff
+    }
+
+    [Header("Platform Mode")]
+    public BonusPlatformMode mode = BonusPlatformMode.Toggle;
+
     [Header("Practice Respawn")]
     public bool boostedAfterRespawn = true;
 
@@ -9,8 +19,18 @@ public class SpeedBoostPlatform : MonoBehaviour
     {
         PlayerSpeedBoostBonus bonus = other.GetComponent<PlayerSpeedBoostBonus>();
 
-        if (bonus != null)
+        if (bonus == null)
+            bonus = other.GetComponentInParent<PlayerSpeedBoostBonus>();
+
+        if (bonus == null)
+            return;
+
+        if (mode == BonusPlatformMode.Toggle)
             bonus.ToggleSpeedBoost();
+        else if (mode == BonusPlatformMode.ForceOn)
+            bonus.SetBoostStateFromPlatform(true);
+        else if (mode == BonusPlatformMode.ForceOff)
+            bonus.SetBoostStateFromPlatform(false);
     }
 
     public void ApplyRespawnState(PlayerSpeedBoostBonus bonus)

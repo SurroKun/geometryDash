@@ -25,14 +25,10 @@ public class PlayerGravityFlip : MonoBehaviour
     public float visualRotateDuration = 0.03f;
     public float cameraRotateDuration = 0.10f;
 
-    [Header("Respawn Protection")]
-    public float triggerIgnoreAfterRespawn = 0.2f;
-
     private bool isGravityInverted = false;
     private bool isSideInputInverted = false;
     private bool isFlipping = false;
     private bool gravityPaused = false;
-    private float ignoreTriggerTimer = 0f;
 
     public bool IsGravityInverted()
     {
@@ -46,7 +42,7 @@ public class PlayerGravityFlip : MonoBehaviour
 
     public bool CanTriggerGravity()
     {
-        return ignoreTriggerTimer <= 0f && !isFlipping;
+        return !isFlipping;
     }
 
     private void Start()
@@ -64,12 +60,6 @@ public class PlayerGravityFlip : MonoBehaviour
             rb.useGravity = false;
     }
 
-    private void Update()
-    {
-        if (ignoreTriggerTimer > 0f)
-            ignoreTriggerTimer -= Time.deltaTime;
-    }
-
     private void FixedUpdate()
     {
         if (rb == null || gravityPaused)
@@ -84,7 +74,7 @@ public class PlayerGravityFlip : MonoBehaviour
         if (!CanTriggerGravity())
             return false;
 
-        StartCoroutine(SmoothFlip(true, true));
+        StartCoroutine(SmoothFlip(!isGravityInverted, true, true));
         return true;
     }
 
@@ -93,11 +83,24 @@ public class PlayerGravityFlip : MonoBehaviour
         if (!CanTriggerGravity())
             return false;
 
-        StartCoroutine(SmoothFlip(false, false));
+        StartCoroutine(SmoothFlip(!isGravityInverted, false, false));
+        return true;
+    }
+
+    public bool SetGravityStateFromPlatform(bool gravityInverted)
+    {
+        if (!CanTriggerGravity())
+            return false;
+
+        if (isGravityInverted == gravityInverted)
+            return true;
+
+        StartCoroutine(SmoothFlip(gravityInverted, true, true));
         return true;
     }
 
     private IEnumerator SmoothFlip(
+        bool targetGravityInverted,
         bool changeSideInput,
         bool changeCamera
     )
@@ -105,7 +108,7 @@ public class PlayerGravityFlip : MonoBehaviour
         isFlipping = true;
         gravityPaused = true;
 
-        isGravityInverted = !isGravityInverted;
+        isGravityInverted = targetGravityInverted;
 
         if (changeSideInput)
         {
@@ -255,6 +258,6 @@ public class PlayerGravityFlip : MonoBehaviour
 
     public void IgnoreTriggersAfterRespawn()
     {
-        ignoreTriggerTimer = triggerIgnoreAfterRespawn;
+        // Kept for compatibility with older PracticeModeManager versions.
     }
 }

@@ -5,14 +5,9 @@ public class PlayerSpeedBoostBonus : MonoBehaviour
     [Header("Speed Boost")]
     public float speedMultiplier = 1.5f;
 
-    [Header("Respawn Protection")]
-    public float triggerIgnoreAfterRespawn = 0.2f;
-
     private bool isBoosted = false;
     private float baseForwardSpeed = 6.3f;
     private PlayerMove playerMove;
-
-    private float ignoreTriggerTimer = 0f;
 
     void Start()
     {
@@ -24,18 +19,17 @@ public class PlayerSpeedBoostBonus : MonoBehaviour
         ApplySpeed();
     }
 
-    void Update()
-    {
-        if (ignoreTriggerTimer > 0f)
-            ignoreTriggerTimer -= Time.deltaTime;
-    }
-
     public void ToggleSpeedBoost()
     {
-        if (ignoreTriggerTimer > 0f)
+        SetBoostStateFromPlatform(!isBoosted);
+    }
+
+    public void SetBoostStateFromPlatform(bool value)
+    {
+        if (isBoosted == value)
             return;
 
-        isBoosted = !isBoosted;
+        isBoosted = value;
         ApplySpeed();
 
         Debug.Log("Speed Boost: " + (isBoosted ? "ON" : "OFF"));
@@ -56,7 +50,7 @@ public class PlayerSpeedBoostBonus : MonoBehaviour
 
     public void IgnoreTriggersAfterRespawn()
     {
-        ignoreTriggerTimer = triggerIgnoreAfterRespawn;
+        // Kept for compatibility with older PracticeModeManager versions.
     }
 
     private void ApplySpeed()

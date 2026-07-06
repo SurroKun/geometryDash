@@ -331,6 +331,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &9488879
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -812,6 +814,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &78332610
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2234,6 +2238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &240209078
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8535,6 +8541,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &809977578
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9010,6 +9018,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &858893773
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9048,6 +9058,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &858906017
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9503,6 +9515,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &904453612
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16772,6 +16786,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &1373216138
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20118,6 +20134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &1795743572
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20666,6 +20684,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1865953882
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -486,24 +486,16 @@ public class PracticeModeManager : MonoBehaviour
                 checkpoint.sideInputInverted,
                 false
             );
-
-            gravityFlip.IgnoreTriggersAfterRespawn();
         }
 
         if (cameraFollow != null)
             cameraFollow.SetCameraGravityInverted(checkpoint.cameraGravityInverted);
 
         if (jumpHeightBonus != null)
-        {
             jumpHeightBonus.SetBoostState(checkpoint.jumpBoostActive);
-            jumpHeightBonus.IgnoreTriggersAfterRespawn();
-        }
 
         if (speedBoostBonus != null)
-        {
             speedBoostBonus.SetBoostState(checkpoint.speedBoostActive);
-            speedBoostBonus.IgnoreTriggersAfterRespawn();
-        }
 
         if (trail != null)
             trail.ResetTrail();

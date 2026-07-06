@@ -4651,6 +4651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &372909829
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5646,6 +5648,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &483222994
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6528,6 +6532,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &545097307
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6768,7 +6774,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &558700003
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9157,6 +9167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &827753121
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9177,7 +9189,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.06, y: 0.019999977, z: 0.1}
-  m_Center: {x: 0, y: 2.2899995, z: -0.01}
+  m_Center: {x: 0, y: 2.2899995, z: 0.03}
 --- !u!1 &828250806 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3597916849008407990, guid: 02fa00916703cf946bb21e37a381400b, type: 3}
@@ -9370,7 +9382,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &837764469
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9637,6 +9653,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &862947687
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9843,6 +9861,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &874635303
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18007,6 +18027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &1292390330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20947,7 +20969,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &1483587911
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29834,6 +29860,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &1989390724
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -30875,7 +30903,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &2101501241
 BoxCollider:
   m_ObjectHideFlags: 0

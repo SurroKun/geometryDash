@@ -4308,15 +4308,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -9118340774628722946, guid: f0514cc209de64e48bb01b2d63eb14ef, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -9118340774628722946, guid: f0514cc209de64e48bb01b2d63eb14ef, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 288066443}
-    - targetCorrespondingSourceObject: {fileID: -9118340774628722946, guid: f0514cc209de64e48bb01b2d63eb14ef, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 288066442}
     - targetCorrespondingSourceObject: {fileID: -8652470185007139525, guid: f0514cc209de64e48bb01b2d63eb14ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1871620724}
@@ -4362,11 +4357,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -8652470185007139525, guid: f0514cc209de64e48bb01b2d63eb14ef, type: 3}
   m_PrefabInstance: {fileID: 288066432}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &288066437 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -9118340774628722946, guid: f0514cc209de64e48bb01b2d63eb14ef, type: 3}
-  m_PrefabInstance: {fileID: 288066432}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &288066438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4379,7 +4369,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &288066439
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4413,7 +4407,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &288066441
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4435,40 +4433,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.06, y: 0.019999996, z: 0.13}
   m_Center: {x: 0, y: 0.000000007450581, z: 0}
---- !u!114 &288066442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288066437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
-  retriggerDelay: 0.15
---- !u!65 &288066443
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288066437}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: 0.00000011920929, z: -0.00000023841858}
 --- !u!64 &289181585
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -15904,15 +15868,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -1659074115714076382, guid: 319d4235c1d82e945956ac9199a2a3f1, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -1659074115714076382, guid: 319d4235c1d82e945956ac9199a2a3f1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1171835660}
-    - targetCorrespondingSourceObject: {fileID: -1659074115714076382, guid: 319d4235c1d82e945956ac9199a2a3f1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1171835659}
     - targetCorrespondingSourceObject: {fileID: -4710330471401377940, guid: 319d4235c1d82e945956ac9199a2a3f1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1829017974}
@@ -15958,11 +15917,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -4710330471401377940, guid: 319d4235c1d82e945956ac9199a2a3f1, type: 3}
   m_PrefabInstance: {fileID: 1171835649}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1171835654 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1659074115714076382, guid: 319d4235c1d82e945956ac9199a2a3f1, type: 3}
-  m_PrefabInstance: {fileID: 1171835649}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1171835655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15975,6 +15929,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1171835656
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16008,6 +15964,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1171835658
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16029,39 +15987,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.06, y: 0.019999996, z: 0.07}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1171835659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171835654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
---- !u!65 &1171835660
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171835654}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: 0, z: -0.00000023841858}
 --- !u!65 &1173831499
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16278,6 +16203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &1205757956
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17684,7 +17611,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &1330914107
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -21840,6 +21771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &1829017974
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22169,7 +22102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &1871620724
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26937,15 +26874,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -6787876574090221886, guid: 11642a63082281344803240c71c35024, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -6787876574090221886, guid: 11642a63082281344803240c71c35024, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2056699642}
-    - targetCorrespondingSourceObject: {fileID: -6787876574090221886, guid: 11642a63082281344803240c71c35024, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2056699650}
     - targetCorrespondingSourceObject: {fileID: 5788418334452224936, guid: 11642a63082281344803240c71c35024, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2056699640}
@@ -26967,11 +26899,6 @@ GameObject:
 --- !u!1 &2056699635 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5788418334452224936, guid: 11642a63082281344803240c71c35024, type: 3}
-  m_PrefabInstance: {fileID: 2056699633}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2056699636 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -6787876574090221886, guid: 11642a63082281344803240c71c35024, type: 3}
   m_PrefabInstance: {fileID: 2056699633}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &2056699638
@@ -27028,27 +26955,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
---- !u!65 &2056699642
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056699636}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02, y: 0.059999987, z: 0.010000007}
-  m_Center: {x: 0, y: 0, z: -0.00000023841858}
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!114 &2056699649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27061,18 +26969,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
---- !u!114 &2056699650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056699636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!64 &2058664890
 MeshCollider:
   m_ObjectHideFlags: 0

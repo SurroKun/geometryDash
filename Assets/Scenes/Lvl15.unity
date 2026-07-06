@@ -543,6 +543,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &60076894
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1211,6 +1213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &154087565
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1622,6 +1626,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &201993626
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2134,7 +2140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &271818064
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3598,6 +3608,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &472961327
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5863,6 +5875,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &552420109
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7127,6 +7141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &678395089
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11028,7 +11044,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &1070226860
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11213,6 +11233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &1091248577
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11534,6 +11556,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1155699625
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13189,6 +13213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &1429200893
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14961,44 +14987,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2819427846313162324, guid: c93977f9276fdc94889b64d6ef76d2a0, type: 3}
---- !u!1 &1713683158 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -4024250273584236687, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
-  m_PrefabInstance: {fileID: 1996106965}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1713683162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1713683158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
---- !u!65 &1713683163
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1713683158}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.020000005, y: 0.06, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1714387592 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2874765826992384646, guid: 6ebb6037f63c7c541929309c83ccc0d8, type: 3}
@@ -18192,6 +18180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1856614007
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18534,8 +18524,50 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4973348233171636559, guid: 51983917616e1134e83f51c15b17ee74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1919696917}
+    - targetCorrespondingSourceObject: {fileID: 6791785305032486112, guid: 51983917616e1134e83f51c15b17ee74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1919696916}
   m_SourcePrefab: {fileID: 100100000, guid: 51983917616e1134e83f51c15b17ee74, type: 3}
+--- !u!1 &1919696914 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6791785305032486112, guid: 51983917616e1134e83f51c15b17ee74, type: 3}
+  m_PrefabInstance: {fileID: 1919696913}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1919696915 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4973348233171636559, guid: 51983917616e1134e83f51c15b17ee74, type: 3}
+  m_PrefabInstance: {fileID: 1919696913}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1919696916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919696914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de49d86a82710b04684438822c0f176a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CloudMoveZ
+  speed: 7.2
+--- !u!114 &1919696917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919696915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de49d86a82710b04684438822c0f176a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CloudMoveZ
+  speed: 6.8
 --- !u!1 &1920803136 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5112501970465531209, guid: 89a9cb32170b5ec4e94780f238b0d943, type: 3}
@@ -19279,6 +19311,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -6787876574090221886, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
+    - {fileID: -4024250273584236687, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5788418334452224936, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
@@ -19299,12 +19332,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8381382159207937396, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 154087564}
-    - targetCorrespondingSourceObject: {fileID: -4024250273584236687, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1713683163}
-    - targetCorrespondingSourceObject: {fileID: -4024250273584236687, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1713683162}
     - targetCorrespondingSourceObject: {fileID: -7108866127846641958, guid: 170bd85ac2d2f9e42b7e0cf1b92e83b7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 201993626}

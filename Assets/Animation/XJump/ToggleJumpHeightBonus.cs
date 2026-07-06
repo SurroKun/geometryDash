@@ -5,14 +5,9 @@ public class PlayerJumpHeightBonus : MonoBehaviour
     [Header("Jump Height Bonus")]
     public float jumpMultiplier = 2f;
 
-    [Header("Respawn Protection")]
-    public float triggerIgnoreAfterRespawn = 0.2f;
-
     private bool isBoosted = false;
     private float baseJumpForce = 10.1f;
     private PlayerMove playerMove;
-
-    private float ignoreTriggerTimer = 0f;
 
     void Start()
     {
@@ -24,18 +19,17 @@ public class PlayerJumpHeightBonus : MonoBehaviour
         ApplyJumpForce();
     }
 
-    void Update()
-    {
-        if (ignoreTriggerTimer > 0f)
-            ignoreTriggerTimer -= Time.deltaTime;
-    }
-
     public void ToggleJumpHeightBonus()
     {
-        if (ignoreTriggerTimer > 0f)
+        SetBoostStateFromPlatform(!isBoosted);
+    }
+
+    public void SetBoostStateFromPlatform(bool value)
+    {
+        if (isBoosted == value)
             return;
 
-        isBoosted = !isBoosted;
+        isBoosted = value;
         ApplyJumpForce();
 
         Debug.Log("Jump Height Boost: " + (isBoosted ? "ON" : "OFF"));
@@ -56,7 +50,7 @@ public class PlayerJumpHeightBonus : MonoBehaviour
 
     public void IgnoreTriggersAfterRespawn()
     {
-        ignoreTriggerTimer = triggerIgnoreAfterRespawn;
+        // Kept for compatibility with older PracticeModeManager versions.
     }
 
     private void ApplyJumpForce()

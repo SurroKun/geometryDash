@@ -1389,7 +1389,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &182985434
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1454,7 +1458,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &197200309
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1639,6 +1647,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &220209626
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2646,6 +2656,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &346746258
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3927,7 +3939,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &514263997
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6791,6 +6807,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &734059561
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6923,7 +6941,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &741606126
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7231,6 +7253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
+  boostedAfterRespawn: 1
 --- !u!65 &786231829
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8712,6 +8736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &958801764
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11078,6 +11104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &994411784
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13170,7 +13198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &1190722082
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15545,7 +15577,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &1486141540
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1317,10 +1317,18 @@ PrefabInstance:
       propertyPath: deathMenuUI
       value: 
       objectReference: {fileID: 821059431}
+    - target: {fileID: 3575134424439774301, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+      propertyPath: triggerIgnoreAfterRespawn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4412090696661817396, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: cameraFollow
       value: 
       objectReference: {fileID: 2083343000}
+    - target: {fileID: 4989806046453321697, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+      propertyPath: triggerIgnoreAfterRespawn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5188596387365322072, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: m_LocalPosition.x
       value: 68.23
@@ -1376,6 +1384,10 @@ PrefabInstance:
     - target: {fileID: 5788275822932496414, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: m_BackGroundColor.r
       value: 0.29166034
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321865639023859178, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+      propertyPath: triggerIgnoreAfterRespawn
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1922,6 +1934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
   gravityInvertedAfterRespawn: 1
   sideInputInvertedAfterRespawn: 1
@@ -1945,8 +1958,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.09}
+  m_Center: {x: 0, y: 0, z: 0.04}
 --- !u!64 &205744822
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12363,6 +12376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
   gravityInvertedAfterRespawn: 1
   sideInputInvertedAfterRespawn: 1
@@ -12386,8 +12400,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: -0.0000019073486, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.09}
+  m_Center: {x: 0, y: -0.0000019073486, z: 0.04}
 --- !u!1001 &821059430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12731,10 +12745,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1872524424248234702, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 841327947212422817, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
-      insertIndex: 0
-      addedObject: {fileID: 1680577906}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
 --- !u!114 &821059431 stripped
@@ -14478,6 +14489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
   boostedAfterRespawn: 1
 --- !u!65 &1101786614
 BoxCollider:
@@ -14498,8 +14510,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: -0.0000019073486, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.11}
+  m_Center: {x: 0, y: -0.0000019073486, z: 0.04}
 --- !u!65 &1110573342
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16927,15 +16939,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -9118340774628722946, guid: b755dd026c276ce41af3f1a04906e144, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -9118340774628722946, guid: b755dd026c276ce41af3f1a04906e144, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1343906838}
-    - targetCorrespondingSourceObject: {fileID: -9118340774628722946, guid: b755dd026c276ce41af3f1a04906e144, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1343906837}
     - targetCorrespondingSourceObject: {fileID: -4710330471401377940, guid: b755dd026c276ce41af3f1a04906e144, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1898605874}
@@ -17003,11 +17010,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -4710330471401377940, guid: b755dd026c276ce41af3f1a04906e144, type: 3}
   m_PrefabInstance: {fileID: 1343906825}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1343906832 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -9118340774628722946, guid: b755dd026c276ce41af3f1a04906e144, type: 3}
-  m_PrefabInstance: {fileID: 1343906825}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1343906833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17020,6 +17022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
   gravityInvertedAfterRespawn: 1
   sideInputInvertedAfterRespawn: 1
@@ -17043,8 +17046,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: -0.0000019073486, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.09}
+  m_Center: {x: 0, y: -0.0000019073486, z: 0.04}
 --- !u!114 &1343906835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17057,6 +17060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
   gravityInvertedAfterRespawn: 1
   sideInputInvertedAfterRespawn: 1
@@ -17080,45 +17084,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: -0.0000019073486, z: 0}
---- !u!114 &1343906837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1343906832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
-  retriggerDelay: 0.15
-  gravityInvertedAfterRespawn: 1
-  sideInputInvertedAfterRespawn: 1
-  syncCameraAfterRespawn: 1
---- !u!65 &1343906838
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1343906832}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0.000000029802322, y: 0, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.09}
+  m_Center: {x: 0, y: -0.0000019073486, z: 0.04}
 --- !u!65 &1344861266
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23007,81 +22974,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.020245746, y: 0.02021545, z: 0.01}
   m_Center: {x: 0.0043350356, y: 0.0037363425, z: -0.006}
---- !u!1 &1680577905
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1680577906}
-  - component: {fileID: 1680577908}
-  - component: {fileID: 1680577907}
-  m_Layer: 5
-  m_Name: Back
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1680577906
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1680577905}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.01, y: 0.9972591, z: 0.97293574}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 1947046863}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -472, y: -2}
-  m_SizeDelta: {x: 550, y: 850}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1680577907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1680577905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 19ba952f0072dcc4182ece4e814ef4f1, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1680577908
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1680577905}
-  m_CullTransparentMesh: 1
 --- !u!64 &1680921056
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -24506,6 +24398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
   gravityInvertedAfterRespawn: 1
   sideInputInvertedAfterRespawn: 1
@@ -24529,8 +24422,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: -0.0000019073486, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.09}
+  m_Center: {x: 0, y: -0.0000019073486, z: 0.04}
 --- !u!64 &1840760572
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -26401,6 +26294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
   gravityInvertedAfterRespawn: 1
   sideInputInvertedAfterRespawn: 1
@@ -26424,8 +26318,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.09}
+  m_Center: {x: 0, y: 0, z: 0.04}
 --- !u!65 &1899969628
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26815,11 +26709,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 8506474236603381653, guid: 95fb86ff93b131e478ab5fa419ab4e1b, type: 3}
---- !u!224 &1947046863 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 841327947212422817, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
-  m_PrefabInstance: {fileID: 821059430}
-  m_PrefabAsset: {fileID: 0}
 --- !u!65 &1950139501
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27111,15 +27000,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -1659074115714076382, guid: 04d17a5031ade9d45905200787f47676, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -1659074115714076382, guid: 04d17a5031ade9d45905200787f47676, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1962543167}
-    - targetCorrespondingSourceObject: {fileID: -1659074115714076382, guid: 04d17a5031ade9d45905200787f47676, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1962543166}
     - targetCorrespondingSourceObject: {fileID: -8652470185007139525, guid: 04d17a5031ade9d45905200787f47676, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1101786614}
@@ -27165,11 +27049,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -8652470185007139525, guid: 04d17a5031ade9d45905200787f47676, type: 3}
   m_PrefabInstance: {fileID: 1962543156}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1962543161 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1659074115714076382, guid: 04d17a5031ade9d45905200787f47676, type: 3}
-  m_PrefabInstance: {fileID: 1962543156}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1962543162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27182,6 +27061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
   boostedAfterRespawn: 1
 --- !u!65 &1962543163
 BoxCollider:
@@ -27202,8 +27082,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.11}
+  m_Center: {x: 0, y: 0, z: 0.04}
 --- !u!114 &1962543164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27216,6 +27096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
   boostedAfterRespawn: 1
 --- !u!65 &1962543165
 BoxCollider:
@@ -27236,42 +27117,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1962543166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1962543161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
-  boostedAfterRespawn: 1
---- !u!65 &1962543167
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1962543161}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0.000000029802322, y: 0, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.11}
+  m_Center: {x: 0, y: 0, z: 0.04}
 --- !u!64 &1963079214
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -28378,6 +28225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 0
   boostedAfterRespawn: 1
 --- !u!65 &2143862861
 BoxCollider:
@@ -28398,8 +28246,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.019999996, z: 0.009999998}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.06, y: 0.019999996, z: 0.11}
+  m_Center: {x: 0, y: 0, z: 0.04}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

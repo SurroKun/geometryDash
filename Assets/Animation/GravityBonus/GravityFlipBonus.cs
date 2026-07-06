@@ -2,6 +2,16 @@ using UnityEngine;
 
 public class GravityFlipBonus : MonoBehaviour
 {
+    public enum GravityPlatformMode
+    {
+        Toggle,
+        ForceInverted,
+        ForceNormal
+    }
+
+    [Header("Platform Mode")]
+    public GravityPlatformMode mode = GravityPlatformMode.Toggle;
+
     [Header("Trigger Protection")]
     public float retriggerDelay = 0.15f;
 
@@ -31,10 +41,14 @@ public class GravityFlipBonus : MonoBehaviour
         if (gravityFlip == null)
             return;
 
-        if (!gravityFlip.CanTriggerGravity())
-            return;
+        bool success = false;
 
-        bool success = gravityFlip.ToggleGravity();
+        if (mode == GravityPlatformMode.Toggle)
+            success = gravityFlip.ToggleGravity();
+        else if (mode == GravityPlatformMode.ForceInverted)
+            success = gravityFlip.SetGravityStateFromPlatform(true);
+        else if (mode == GravityPlatformMode.ForceNormal)
+            success = gravityFlip.SetGravityStateFromPlatform(false);
 
         if (!success)
             return;

@@ -1480,7 +1480,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!1 &144377246 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6062279028615153500, guid: ae357107eab4fe0428339f58ba008647, type: 3}
@@ -6366,6 +6370,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!1 &594401714 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1835210009659533079, guid: db814bbd527799c4d9900ce78c20c10c, type: 3}
@@ -6477,6 +6483,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &609831593
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7005,6 +7013,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!1 &663067887 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2633412401873037487, guid: 09266bd2e2bcafd4aaa5fe5e04778ce6, type: 3}
@@ -7917,7 +7927,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!1 &770683544 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1891630423312683343, guid: db814bbd527799c4d9900ce78c20c10c, type: 3}
@@ -8775,6 +8789,25 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6406688696220049883, guid: ab6744e8503ece14a8127a38d9ad49f4, type: 3}
+--- !u!1 &893960802 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4973348233171636559, guid: 32ee3c4d8d648d54288afd5d5fac963f, type: 3}
+  m_PrefabInstance: {fileID: 2048058671}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &893960804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893960802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de49d86a82710b04684438822c0f176a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CloudMoveZ
+  speed: 6.8
+  stopWhenGamePaused: 1
 --- !u!1 &897827625 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 281855664364225751, guid: db814bbd527799c4d9900ce78c20c10c, type: 3}
@@ -11507,6 +11540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &1065194638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12242,6 +12277,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 167940199051207100, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 167940199051207100, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 167940199051207100, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 167940199051207100, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -12289,9 +12336,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1566714152615672444, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1857162161775644046, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
       propertyPath: m_Name
       value: Canvas 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3813983491433055143, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8902632046309518056, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -12659,6 +12714,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.01533081, y: 0.015725017, z: 0.00481985}
   m_Center: {x: 0.000000033527613, y: 0.0000019120052, z: -0.000000043539323}
+--- !u!1 &1227095788 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6791785305032486112, guid: 32ee3c4d8d648d54288afd5d5fac963f, type: 3}
+  m_PrefabInstance: {fileID: 2048058671}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1227095790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227095788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de49d86a82710b04684438822c0f176a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CloudMoveZ
+  speed: 7.1
+  stopWhenGamePaused: 1
 --- !u!1 &1236998315 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7515429101286732190, guid: db814bbd527799c4d9900ce78c20c10c, type: 3}
@@ -14642,6 +14716,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!1 &1426679229 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1062332086872314084, guid: 09266bd2e2bcafd4aaa5fe5e04778ce6, type: 3}
@@ -14754,7 +14830,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!1 &1447643077 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3298177865297124786, guid: ab6744e8503ece14a8127a38d9ad49f4, type: 3}
@@ -17961,6 +18041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1855802167
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18062,7 +18144,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!1 &1873970312 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -516098083770646512, guid: db814bbd527799c4d9900ce78c20c10c, type: 3}
@@ -19489,7 +19575,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4973348233171636559, guid: 32ee3c4d8d648d54288afd5d5fac963f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 893960804}
+    - targetCorrespondingSourceObject: {fileID: 6791785305032486112, guid: 32ee3c4d8d648d54288afd5d5fac963f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1227095790}
   m_SourcePrefab: {fileID: 100100000, guid: 32ee3c4d8d648d54288afd5d5fac963f, type: 3}
 --- !u!1 &2048660409 stripped
 GameObject:
@@ -19702,6 +19794,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!1 &2087127896 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6792889981931915972, guid: db814bbd527799c4d9900ce78c20c10c, type: 3}
@@ -19766,6 +19860,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &2087435967
 BoxCollider:
   m_ObjectHideFlags: 0

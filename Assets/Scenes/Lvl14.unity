@@ -3438,6 +3438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &75826403
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4758,7 +4760,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 2
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &239965896
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11019,8 +11025,50 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4973348233171636559, guid: 4cff7c51af2e8f14e8fa23507595ef11, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1002551561}
+    - targetCorrespondingSourceObject: {fileID: 6791785305032486112, guid: 4cff7c51af2e8f14e8fa23507595ef11, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1002551560}
   m_SourcePrefab: {fileID: 100100000, guid: 4cff7c51af2e8f14e8fa23507595ef11, type: 3}
+--- !u!1 &1002551558 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6791785305032486112, guid: 4cff7c51af2e8f14e8fa23507595ef11, type: 3}
+  m_PrefabInstance: {fileID: 1002551557}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1002551559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4973348233171636559, guid: 4cff7c51af2e8f14e8fa23507595ef11, type: 3}
+  m_PrefabInstance: {fileID: 1002551557}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1002551560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002551558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de49d86a82710b04684438822c0f176a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CloudMoveZ
+  speed: 7.2
+--- !u!114 &1002551561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002551559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de49d86a82710b04684438822c0f176a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CloudMoveZ
+  speed: 6.8
 --- !u!1 &1008161056 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5790678298280242585, guid: 1ce2ce4610242374fb8172033ee04148, type: 3}
@@ -12713,6 +12761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1319990648
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13345,6 +13395,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &1378337690
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13641,6 +13693,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &1420342362
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14717,7 +14771,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4807cdad12ec64390efdf08c4eb579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFlipBonus
+  mode: 1
   retriggerDelay: 0.15
+  gravityInvertedAfterRespawn: 1
+  sideInputInvertedAfterRespawn: 1
+  syncCameraAfterRespawn: 1
 --- !u!65 &1563699435
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18029,6 +18087,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e485cfbdc03f19418f07ac85dd69c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostPlatform
+  mode: 1
+  boostedAfterRespawn: 1
 --- !u!65 &1859633328
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18888,6 +18948,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816022672aecf3d438e9d094cf86ab82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpHeightPlatform
+  mode: 2
+  boostedAfterRespawn: 1
 --- !u!65 &1956748543
 BoxCollider:
   m_ObjectHideFlags: 0
