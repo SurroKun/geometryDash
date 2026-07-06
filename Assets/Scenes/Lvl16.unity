@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 1
-  m_FogColor: {r: 1, g: 0.8175179, b: 0.7704402, a: 1}
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.004
+  m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -9589,8 +9589,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
-  m_Color: {r: 1, g: 0.832647, b: 0.7012578, a: 1}
-  m_Intensity: 1.2
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -9652,13 +9652,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 742847329}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.9659023, y: 0.0018068488, z: 0.2588127, w: -0.0067432527}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 180.8, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &742847332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15506,17 +15506,57 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1527053919954302671, guid: 695845dc0abf4314c98bfa6b281962eb, type: 3}
+--- !u!1 &1126755938 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2424363180556079708, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+  m_PrefabInstance: {fileID: 1853015555}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1126755946 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7677028669691738491, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
   m_PrefabInstance: {fileID: 1853015555}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1126755938}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4f222bfa559e904f8612f92946147ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PracticeModeManager
+--- !u!114 &1126755952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126755938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6825c5fa19c2df43ad225a377f6c511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpeedBoostBonus
+  speedMultiplier: 1.5
+  triggerIgnoreAfterRespawn: 0.2
+--- !u!114 &1126755953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126755938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 400165b15ac0bba41bdcde8224466945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerJumpSpeedDashBonus
+  jumpKey1: 119
+  jumpKey2: 273
+  jumpBufferTime: 0.18
+  allowBufferedPressBeforeEnter: 1
+  activationEffectPrefab: {fileID: 0}
+  effectOffset: {x: 0, y: 0, z: 0}
+  triggerIgnoreAfterRespawn: 0.2
+  cooldown: 0.15
+  disableGravityFlipDuringDash: 0
 --- !u!1 &1131941050 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3853817159455538089, guid: 69425a7e52c3436428af6536c7ec683e, type: 3}
@@ -23547,22 +23587,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5788275822932496414, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
-      propertyPath: m_ClearFlags
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5788275822932496414, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.36845842
-      objectReference: {fileID: 0}
-    - target: {fileID: 5788275822932496414, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.67537946
-      objectReference: {fileID: 0}
-    - target: {fileID: 5788275822932496414, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.8679245
-      objectReference: {fileID: 0}
     - target: {fileID: 7677028669691738491, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: checkpointYOffset
       value: 0
@@ -23570,7 +23594,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2424363180556079708, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1126755953}
+    - targetCorrespondingSourceObject: {fileID: 2424363180556079708, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1126755952}
   m_SourcePrefab: {fileID: 100100000, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
 --- !u!1 &1857741277 stripped
 GameObject:
@@ -27076,9 +27106,8 @@ BoxCollider:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1853015555}
-  - {fileID: 2144281034}
   - {fileID: 742847331}
+  - {fileID: 1853015555}
   - {fileID: 920771464}
   - {fileID: 792552017}
   - {fileID: 1068229288}
@@ -27092,3 +27121,4 @@ SceneRoots:
   - {fileID: 214466777}
   - {fileID: 1010462233}
   - {fileID: 1657768142}
+  - {fileID: 2144281034}
