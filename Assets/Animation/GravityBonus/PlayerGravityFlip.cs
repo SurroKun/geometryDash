@@ -29,6 +29,7 @@ public class PlayerGravityFlip : MonoBehaviour
     public float triggerIgnoreAfterRespawn = 0.2f;
 
     private bool isGravityInverted = false;
+    private bool isSideInputInverted = false;
     private bool isFlipping = false;
     private bool gravityPaused = false;
     private float ignoreTriggerTimer = 0f;
@@ -36,6 +37,11 @@ public class PlayerGravityFlip : MonoBehaviour
     public bool IsGravityInverted()
     {
         return isGravityInverted;
+    }
+
+    public bool IsSideInputInverted()
+    {
+        return isSideInputInverted;
     }
 
     public bool CanTriggerGravity()
@@ -101,8 +107,13 @@ public class PlayerGravityFlip : MonoBehaviour
 
         isGravityInverted = !isGravityInverted;
 
-        if (playerMove != null && changeSideInput)
-            playerMove.SetSideInputInverted(isGravityInverted);
+        if (changeSideInput)
+        {
+            isSideInputInverted = isGravityInverted;
+
+            if (playerMove != null)
+                playerMove.SetSideInputInverted(isSideInputInverted);
+        }
 
         if (practiceModeManager != null)
             practiceModeManager.NotifyGravityChanged(isGravityInverted);
@@ -197,14 +208,24 @@ public class PlayerGravityFlip : MonoBehaviour
 
     public void SnapGravityState(bool value, bool syncCamera)
     {
+        SnapGravityState(value, value, syncCamera);
+    }
+
+    public void SnapGravityState(
+        bool gravityInverted,
+        bool sideInputInverted,
+        bool syncCamera
+    )
+    {
         StopAllCoroutines();
 
-        isGravityInverted = value;
+        isGravityInverted = gravityInverted;
+        isSideInputInverted = sideInputInverted;
         isFlipping = false;
         gravityPaused = false;
 
         if (playerMove != null)
-            playerMove.SetSideInputInverted(isGravityInverted);
+            playerMove.SetSideInputInverted(isSideInputInverted);
 
         if (syncCamera && cameraFollow != null)
             cameraFollow.SetCameraGravityInverted(isGravityInverted);

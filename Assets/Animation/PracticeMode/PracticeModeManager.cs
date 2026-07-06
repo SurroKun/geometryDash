@@ -16,6 +16,7 @@ public class PracticeModeManager : MonoBehaviour
         public Vector3 position;
         public bool jumpBoostActive;
         public bool gravityInverted;
+        public bool sideInputInverted;
         public bool cameraGravityInverted;
         public bool speedBoostActive;
 
@@ -23,6 +24,7 @@ public class PracticeModeManager : MonoBehaviour
             Vector3 position,
             bool jumpBoostActive,
             bool gravityInverted,
+            bool sideInputInverted,
             bool cameraGravityInverted,
             bool speedBoostActive
         )
@@ -30,6 +32,7 @@ public class PracticeModeManager : MonoBehaviour
             this.position = position;
             this.jumpBoostActive = jumpBoostActive;
             this.gravityInverted = gravityInverted;
+            this.sideInputInverted = sideInputInverted;
             this.cameraGravityInverted = cameraGravityInverted;
             this.speedBoostActive = speedBoostActive;
         }
@@ -60,10 +63,12 @@ public class PracticeModeManager : MonoBehaviour
     [Header("Jump Count Checkpoints")]
     public int jumpsBeforeCheckpoint = 5;
     public bool saveAfterLandingOnly = true;
+    public float groundedCheckpointDelay = 0.1f;
 
     [Header("Checkpoint Settings")]
     public float respawnDelay = 0.35f;
     public float checkpointYOffset = 0.5f;
+    public float respawnBackOffset = 0.5f;
 
     [Header("Checkpoint Marker")]
     public GameObject checkpointMarkerPrefab;
@@ -97,6 +102,8 @@ public class PracticeModeManager : MonoBehaviour
     private int jumpCounter = 0;
     private bool waitingForLandingCheckpoint = false;
     private bool wasGroundedLastFrame = false;
+    private bool pendingLandingCheckpointSave = false;
+    private Coroutine pendingLandingCheckpointCoroutine;
 
     void Start()
     {
@@ -190,11 +197,7 @@ public class PracticeModeManager : MonoBehaviour
             if (saveAfterLandingOnly)
             {
                 if (groundedNow && !wasGroundedLastFrame)
-                {
-                    SaveCheckpoint(player.position, true);
-                    jumpCounter = 0;
-                    waitingForLandingCheckpoint = false;
-                }
+                    BeginDelayedLandingCheckpoint();
             }
             else
             {
@@ -205,6 +208,50 @@ public class PracticeModeManager : MonoBehaviour
         }
 
         wasGroundedLastFrame = groundedNow;
+    }
+
+    private void BeginDelayedLandingCheckpoint()
+    {
+        if (pendingLandingCheckpointSave)
+            return;
+
+        if (groundedCheckpointDelay <= 0f)
+        {
+            TrySaveDelayedLandingCheckpoint();
+            return;
+        }
+
+        pendingLandingCheckpointSave = true;
+
+        pendingLandingCheckpointCoroutine =
+            StartCoroutine(DelayedLandingCheckpointCoroutine());
+    }
+
+    private IEnumerator DelayedLandingCheckpointCoroutine()
+    {
+        yield return new WaitForSeconds(groundedCheckpointDelay);
+
+        pendingLandingCheckpointSave = false;
+        pendingLandingCheckpointCoroutine = null;
+
+        TrySaveDelayedLandingCheckpoint();
+    }
+
+    private void TrySaveDelayedLandingCheckpoint()
+    {
+        if (!CanUpdatePracticeCheckpoints())
+            return;
+
+        if (ShouldBlockCheckpointsInFlight())
+            return;
+
+        if (!IsGroundedSafe())
+            return;
+
+        SaveCheckpoint(player.position, true);
+
+        jumpCounter = 0;
+        waitingForLandingCheckpoint = false;
     }
 
     public void NotifyPlayerJumped()
@@ -264,6 +311,7 @@ public class PracticeModeManager : MonoBehaviour
 
         bool jumpBoostState = false;
         bool gravityState = false;
+        bool sideInputState = false;
         bool cameraGravityState = false;
         bool speedBoostState = false;
 
@@ -271,7 +319,10 @@ public class PracticeModeManager : MonoBehaviour
             jumpBoostState = jumpHeightBonus.IsBoosted();
 
         if (gravityFlip != null)
+        {
             gravityState = gravityFlip.IsGravityInverted();
+            sideInputState = gravityFlip.IsSideInputInverted();
+        }
 
         if (cameraFollow != null)
             cameraGravityState = cameraFollow.IsCameraGravityInverted();
@@ -286,6 +337,7 @@ public class PracticeModeManager : MonoBehaviour
             forceNormalGravityAfterTemporaryBonus)
         {
             gravityState = false;
+            sideInputState = false;
             cameraGravityState = false;
             hasPendingGravityState = false;
             pendingGravityState = false;
@@ -294,6 +346,7 @@ public class PracticeModeManager : MonoBehaviour
         else if (hasPendingGravityState)
         {
             gravityState = pendingGravityState;
+            sideInputState = pendingGravityState;
             cameraGravityState = pendingCameraGravityState;
             hasPendingGravityState = false;
         }
@@ -317,6 +370,7 @@ public class PracticeModeManager : MonoBehaviour
                 checkpointPos,
                 jumpBoostState,
                 gravityState,
+                sideInputState,
                 cameraGravityState,
                 speedBoostState
             )
@@ -336,6 +390,7 @@ public class PracticeModeManager : MonoBehaviour
             "Practice checkpoint saved: " + checkpointPos +
             " | JumpBoost: " + jumpBoostState +
             " | GravityInverted: " + gravityState +
+            " | SideInputInverted: " + sideInputState +
             " | CameraGravityInverted: " + cameraGravityState +
             " | SpeedBoost: " + speedBoostState +
             " | JumpCounter: " + jumpCounter
@@ -401,7 +456,7 @@ public class PracticeModeManager : MonoBehaviour
         PracticeCheckpointData checkpoint =
             checkpoints[checkpoints.Count - 1];
 
-        Vector3 respawnPosition = checkpoint.position;
+        Vector3 respawnPosition = GetRespawnPosition(checkpoint.position);
 
         if (deathEffect != null)
             deathEffect.RestorePlayer();
@@ -426,7 +481,12 @@ public class PracticeModeManager : MonoBehaviour
 
         if (gravityFlip != null)
         {
-            gravityFlip.SnapGravityState(checkpoint.gravityInverted, false);
+            gravityFlip.SnapGravityState(
+                checkpoint.gravityInverted,
+                checkpoint.sideInputInverted,
+                false
+            );
+
             gravityFlip.IgnoreTriggersAfterRespawn();
         }
 
@@ -468,6 +528,14 @@ public class PracticeModeManager : MonoBehaviour
         isRespawning = false;
     }
 
+    private Vector3 GetRespawnPosition(Vector3 checkpointPosition)
+    {
+        if (Mathf.Approximately(respawnBackOffset, 0f))
+            return checkpointPosition;
+
+        return checkpointPosition + Vector3.forward * respawnBackOffset;
+    }
+
     private bool CanUpdatePracticeCheckpoints()
     {
         if (!DeathMenuUI.PracticeModeActive)
@@ -498,6 +566,13 @@ public class PracticeModeManager : MonoBehaviour
         jumpCounter = 0;
         waitingForLandingCheckpoint = false;
         wasGroundedLastFrame = false;
+        pendingLandingCheckpointSave = false;
+
+        if (pendingLandingCheckpointCoroutine != null)
+        {
+            StopCoroutine(pendingLandingCheckpointCoroutine);
+            pendingLandingCheckpointCoroutine = null;
+        }
     }
 
     private void ResetPendingBonusState()
@@ -540,6 +615,7 @@ public class PracticeModeManager : MonoBehaviour
             currentCheckpoint.position +
             " | JumpBoost: " + currentCheckpoint.jumpBoostActive +
             " | GravityInverted: " + currentCheckpoint.gravityInverted +
+            " | SideInputInverted: " + currentCheckpoint.sideInputInverted +
             " | CameraGravityInverted: " + currentCheckpoint.cameraGravityInverted +
             " | SpeedBoost: " + currentCheckpoint.speedBoostActive
         );

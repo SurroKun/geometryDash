@@ -5,6 +5,11 @@ public class GravityFlipBonus : MonoBehaviour
     [Header("Trigger Protection")]
     public float retriggerDelay = 0.15f;
 
+    [Header("Practice Respawn")]
+    public bool gravityInvertedAfterRespawn = true;
+    public bool sideInputInvertedAfterRespawn = true;
+    public bool syncCameraAfterRespawn = true;
+
     private float retriggerTimer = 0f;
 
     void Update()
@@ -35,5 +40,17 @@ public class GravityFlipBonus : MonoBehaviour
             return;
 
         retriggerTimer = retriggerDelay;
+    }
+
+    public void ApplyRespawnState(PlayerGravityFlip gravityFlip)
+    {
+        if (gravityFlip == null)
+            return;
+
+        gravityFlip.SnapGravityState(
+            gravityInvertedAfterRespawn,
+            sideInputInvertedAfterRespawn,
+            syncCameraAfterRespawn
+        );
     }
 }

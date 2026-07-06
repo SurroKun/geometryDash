@@ -201,6 +201,11 @@ public class PlayerMove : MonoBehaviour
         sideInputInverted = value;
     }
 
+    public bool IsSideInputInverted()
+    {
+        return sideInputInverted;
+    }
+
     void HandleLaneInput()
     {
         if (sideInputBlockTimer > 0f)
@@ -260,9 +265,7 @@ public class PlayerMove : MonoBehaviour
                 waitingForGroundAfterDownDash = false;
                 queuedJumpAfterDownDash = false;
 
-                if (!allowDashAfterAirJump)
-                    hasDashedInAir = true;
-
+                hasDashedInAir = !allowDashAfterAirJump;
                 hasJumpedThisAir = true;
                 isGrounded = false;
 
@@ -337,8 +340,7 @@ public class PlayerMove : MonoBehaviour
             PerformJump();
             ClearAirJump();
 
-            if (!allowDashAfterAirJump)
-                hasDashedInAir = true;
+            hasDashedInAir = !allowDashAfterAirJump;
 
             isGrounded = false;
         }
@@ -522,9 +524,15 @@ public class PlayerMove : MonoBehaviour
         if (nearX && leftHeld != rightHeld)
         {
             if (leftHeld && flightHorizontalStep < flightMaxHorizontalSteps)
+            {
                 flightHorizontalStep++;
+                NotifyCameraLaneChanged();
+            }
             else if (rightHeld && flightHorizontalStep > -flightMaxHorizontalSteps)
+            {
                 flightHorizontalStep--;
+                NotifyCameraLaneChanged();
+            }
         }
 
         if (nearY && upHeld != downHeld)
@@ -582,6 +590,7 @@ public class PlayerMove : MonoBehaviour
 
         SetFlightStartPosition();
         ResetFlightSteps();
+        NotifyCameraLaneChanged();
         ResetJumpDashState();
 
         isGrounded = false;
@@ -733,6 +742,21 @@ public class PlayerMove : MonoBehaviour
         {
             ResetAnimatorTriggers();
             SetAnimatorGrounded(false);
+        }
+    }
+
+    public void NotifyTemporaryBonusJumpUsed(bool restoreDownDash)
+    {
+        jumpBufferCounter = 0f;
+        queuedJumpAfterDownDash = false;
+        waitingForGroundAfterDownDash = false;
+        postDownDashLandingJumpTimer = 0f;
+
+        if (restoreDownDash)
+        {
+            hasDashedInAir = false;
+            dashCooldownTimer = 0f;
+            dashBufferCounter = 0f;
         }
     }
 
@@ -895,7 +919,12 @@ public class PlayerMove : MonoBehaviour
 
     private void NotifyCameraLaneChanged()
     {
-        if (cameraFollow != null)
+        if (cameraFollow == null)
+            return;
+
+        if (isFlightModeActive)
+            cameraFollow.SetLane(-flightHorizontalStep);
+        else
             cameraFollow.SetLane(-step);
     }
 
