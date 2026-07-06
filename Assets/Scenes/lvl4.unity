@@ -4004,7 +4004,7 @@ PrefabInstance:
     - target: {fileID: 2469311127434200328, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: deathMenuUI
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1711148590}
     - target: {fileID: 5188596387365322072, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1394.337
@@ -4066,6 +4066,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+--- !u!114 &379055098 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7677028669691738491, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+  m_PrefabInstance: {fileID: 379055097}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f222bfa559e904f8612f92946147ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PracticeModeManager
 --- !u!1 &387880471 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2811032729205572089, guid: 0193a655044da744bacd9d8eaf9b83b2, type: 3}
@@ -8493,6 +8504,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Obstacle
       objectReference: {fileID: 0}
+    - target: {fileID: 8820350241739525464, guid: 0193a655044da744bacd9d8eaf9b83b2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8820350241739525464, guid: 0193a655044da744bacd9d8eaf9b83b2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -416.99588
+      objectReference: {fileID: 0}
     - target: {fileID: 8841383386020861040, guid: 0193a655044da744bacd9d8eaf9b83b2, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -11799,6 +11818,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: -6478536213147159724, guid: e806d1c601e43cc4cb6f56de537ecf64, type: 3}
+    - target: {fileID: 780831729264973560, guid: bc871adbe8ce70940893d2d69f190ecc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.0007186
+      objectReference: {fileID: 0}
+    - target: {fileID: 780831729264973560, guid: bc871adbe8ce70940893d2d69f190ecc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -406.49988
+      objectReference: {fileID: 0}
     - target: {fileID: 849326716049805035, guid: bc871adbe8ce70940893d2d69f190ecc, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -11918,6 +11945,14 @@ PrefabInstance:
     - target: {fileID: 7111736121671760311, guid: bc871adbe8ce70940893d2d69f190ecc, type: 3}
       propertyPath: m_TagString
       value: AirJump
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065775258723652983, guid: bc871adbe8ce70940893d2d69f190ecc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.9959178
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065775258723652983, guid: bc871adbe8ce70940893d2d69f190ecc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -411.99988
       objectReference: {fileID: 0}
     - target: {fileID: 8180306178285870885, guid: bc871adbe8ce70940893d2d69f190ecc, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -22651,11 +22686,30 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8902632046309518056, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 379055098}
+    - target: {fileID: 8902632046309518056, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RemoveLastCheckpoint
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+--- !u!114 &1711148590 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5525921630583289237, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+  m_PrefabInstance: {fileID: 1711148589}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1676266bd69aa499c77c325e31cb8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathMenuUI
 --- !u!1 &1714512316 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6532052527314169287, guid: 0193a655044da744bacd9d8eaf9b83b2, type: 3}

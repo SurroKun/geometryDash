@@ -8593,7 +8593,7 @@ PrefabInstance:
     - target: {fileID: 2469311127434200328, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: deathMenuUI
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1546684575}
     - target: {fileID: 5188596387365322072, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: m_LocalPosition.x
       value: 51.137
@@ -8659,6 +8659,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+--- !u!114 &1082872221 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7677028669691738491, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+  m_PrefabInstance: {fileID: 1082872220}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f222bfa559e904f8612f92946147ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PracticeModeManager
 --- !u!1 &1083179841 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5369540570372518882, guid: 4bf7c9659c318f7428e6d877a9524942, type: 3}
@@ -14803,11 +14814,30 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8902632046309518056, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1082872221}
+    - target: {fileID: 8902632046309518056, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RemoveLastCheckpoint
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+--- !u!114 &1546684575 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5525921630583289237, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+  m_PrefabInstance: {fileID: 1546684574}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1676266bd69aa499c77c325e31cb8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathMenuUI
 --- !u!1 &1552206096 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7937917890876646380, guid: b42e5a2cc7a9ccd4f8c9cb02f810a81d, type: 3}

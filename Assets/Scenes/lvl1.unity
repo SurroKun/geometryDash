@@ -7578,11 +7578,30 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8902632046309518056, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2097917002}
+    - target: {fileID: 8902632046309518056, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RemoveLastCheckpoint
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+--- !u!114 &1726917584 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5525921630583289237, guid: 660fa4cf6c14dff4a9efce17be092bd7, type: 3}
+  m_PrefabInstance: {fileID: 1726917583}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1676266bd69aa499c77c325e31cb8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathMenuUI
 --- !u!1 &1730029793 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6196226192994727168, guid: 3c71dfccfa339bb4c985fc5b04c69412, type: 3}
@@ -8760,7 +8779,7 @@ PrefabInstance:
     - target: {fileID: 2469311127434200328, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: deathMenuUI
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1726917584}
     - target: {fileID: 3703024800494864595, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -8888,6 +8907,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+--- !u!114 &2097917002 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7677028669691738491, guid: 954b2e7ffef0ace458eb1a3712eeb989, type: 3}
+  m_PrefabInstance: {fileID: 2097917001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f222bfa559e904f8612f92946147ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PracticeModeManager
 --- !u!1 &2104887254 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7884998672241113059, guid: b861ad5a82667e74283553880cb9d197, type: 3}
