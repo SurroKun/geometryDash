@@ -100,6 +100,8 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
             currentZone = zone;
             usedThisEnter = false;
 
+            ResetCurrentZoneEffect();
+
             if (allowBufferedPressBeforeEnter &&
                 jumpBufferTimer > 0f)
             {
@@ -135,7 +137,7 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
         cooldownTimer = cooldown;
         jumpBufferTimer = 0f;
 
-        SpawnActivationEffect();
+        PlayCurrentZoneEffect();
 
         StartSpeedDash(
             currentZone.dashSpeedMultiplier,
@@ -144,6 +146,50 @@ public class PlayerJumpSpeedDashBonus : MonoBehaviour
         );
 
         return true;
+    }
+
+    private void PlayCurrentZoneEffect()
+    {
+        if (currentZone == null)
+        {
+            SpawnActivationEffect();
+            return;
+        }
+
+        BonusEffectController effect =
+            currentZone.GetComponent<BonusEffectController>();
+
+        if (effect == null)
+            effect = currentZone.GetComponentInChildren<BonusEffectController>(true);
+
+        if (effect == null)
+            effect = currentZone.GetComponentInParent<BonusEffectController>();
+
+        if (effect != null)
+        {
+            effect.PlayActivation();
+            return;
+        }
+
+        SpawnActivationEffect();
+    }
+
+    private void ResetCurrentZoneEffect()
+    {
+        if (currentZone == null)
+            return;
+
+        BonusEffectController effect =
+            currentZone.GetComponent<BonusEffectController>();
+
+        if (effect == null)
+            effect = currentZone.GetComponentInChildren<BonusEffectController>(true);
+
+        if (effect == null)
+            effect = currentZone.GetComponentInParent<BonusEffectController>();
+
+        if (effect != null)
+            effect.ResetEffect();
     }
 
     private void SpawnActivationEffect()

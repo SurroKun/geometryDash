@@ -30,10 +30,22 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
     private PracticeModeManager currentPracticeMode;
     private PlayerJumpSpeedDashBonus currentSpeedDashBonus;
     private Rigidbody currentRb;
+    private BonusEffectController effectController;
 
     private bool playerInside = false;
     private bool usedThisEnter = false;
     private float jumpBufferTimer = 0f;
+
+    private void Awake()
+    {
+        effectController = GetComponent<BonusEffectController>();
+
+        if (effectController == null)
+            effectController = GetComponentInChildren<BonusEffectController>(true);
+
+        if (effectController == null)
+            effectController = GetComponentInParent<BonusEffectController>();
+    }
 
     private void Update()
     {
@@ -117,6 +129,9 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
 
         jumpBufferTimer = 0f;
         usedThisEnter = true;
+
+        if (effectController != null)
+            effectController.PlayActivation();
 
         if (cam != null)
         {
@@ -257,6 +272,9 @@ public class JumpActivatedAntiGravityBonus : MonoBehaviour
 
             playerInside = true;
             usedThisEnter = false;
+
+            if (effectController != null)
+                effectController.ResetEffect();
 
             if (allowBufferedPressBeforeEnter &&
                 jumpBufferTimer > 0f)

@@ -103,6 +103,7 @@ public class PlayerMove : MonoBehaviour
     private float postDownDashLandingJumpTimer = 0f;
 
     private GameObject currentAirJumpObject;
+    private BonusEffectController currentAirJumpEffect;
     private float sideInputBlockTimer = 0f;
 
     private bool sideInputInverted = false;
@@ -260,6 +261,7 @@ public class PlayerMove : MonoBehaviour
                     CancelSpeedDashIfActive();
 
                 PerformJump();
+                PlayCurrentAirJumpEffect();
                 ClearAirJump();
 
                 waitingForGroundAfterDownDash = false;
@@ -338,6 +340,7 @@ public class PlayerMove : MonoBehaviour
                 CancelSpeedDashIfActive();
 
             PerformJump();
+            PlayCurrentAirJumpEffect();
             ClearAirJump();
 
             hasDashedInAir = !allowDashAfterAirJump;
@@ -375,6 +378,7 @@ public class PlayerMove : MonoBehaviour
     {
         canAirJump = false;
         currentAirJumpObject = null;
+        currentAirJumpEffect = null;
     }
 
     private void CancelSpeedDashIfActive()
@@ -456,7 +460,7 @@ public class PlayerMove : MonoBehaviour
             queuedJumpAfterDownDash = IsJumpHeld() && queueJumpAfterDownDash;
         }
 
-        currentAirJumpObject = null;
+        ClearAirJump();
 
         if (!allowAirJumpDuringDownDash)
             canAirJump = false;
@@ -650,7 +654,7 @@ public class PlayerMove : MonoBehaviour
             }
 
             coyoteTimeCounter = coyoteTime;
-            canAirJump = false;
+            ClearAirJump();
 
             if (resetJumpWhenTouchGround)
                 hasJumpedThisAir = false;
@@ -685,7 +689,33 @@ public class PlayerMove : MonoBehaviour
         {
             canAirJump = true;
             currentAirJumpObject = other.gameObject;
+            currentAirJumpEffect = FindAirJumpEffect(other);
+
+            if (currentAirJumpEffect != null)
+                currentAirJumpEffect.ResetEffect();
         }
+    }
+
+    private BonusEffectController FindAirJumpEffect(Collider other)
+    {
+        BonusEffectController effect = other.GetComponent<BonusEffectController>();
+
+        if (effect == null)
+            effect = other.GetComponentInParent<BonusEffectController>();
+
+        if (effect == null)
+            effect = other.GetComponentInChildren<BonusEffectController>();
+
+        if (effect == null && other.transform.parent != null)
+            effect = other.transform.parent.GetComponentInChildren<BonusEffectController>();
+
+        return effect;
+    }
+
+    private void PlayCurrentAirJumpEffect()
+    {
+        if (currentAirJumpEffect != null)
+            currentAirJumpEffect.PlayActivation();
     }
 
     public bool IsGrounded()
@@ -948,8 +978,7 @@ public class PlayerMove : MonoBehaviour
         waitingForGroundAfterDownDash = false;
         queuedJumpAfterDownDash = false;
 
-        canAirJump = false;
-        currentAirJumpObject = null;
+        ClearAirJump();
     }
 
     private void ResetFlightSteps()
