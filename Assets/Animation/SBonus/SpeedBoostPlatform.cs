@@ -20,17 +20,27 @@ public class SpeedBoostPlatform : MonoBehaviour
         PlayerSpeedBoostBonus bonus = other.GetComponent<PlayerSpeedBoostBonus>();
 
         if (bonus == null)
-            bonus = other.GetComponentInParent<PlayerSpeedBoostBonus>();
-
-        if (bonus == null)
             return;
 
+        bool wasBoosted = bonus.IsBoosted();
+
         if (mode == BonusPlatformMode.Toggle)
+        {
             bonus.ToggleSpeedBoost();
+        }
         else if (mode == BonusPlatformMode.ForceOn)
-            bonus.SetBoostStateFromPlatform(true);
+        {
+            bonus.SetBoostState(true);
+        }
         else if (mode == BonusPlatformMode.ForceOff)
-            bonus.SetBoostStateFromPlatform(false);
+        {
+            bonus.SetBoostState(false);
+        }
+
+        bool isBoosted = bonus.IsBoosted();
+
+        if (wasBoosted != isBoosted)
+            PlayPlayerSpeedEffect(other);
     }
 
     public void ApplyRespawnState(PlayerSpeedBoostBonus bonus)
@@ -39,5 +49,18 @@ public class SpeedBoostPlatform : MonoBehaviour
             return;
 
         bonus.SetBoostState(boostedAfterRespawn);
+    }
+
+    private void PlayPlayerSpeedEffect(Collider other)
+    {
+        PlayerBonusEffects effects = other.GetComponent<PlayerBonusEffects>();
+
+        if (effects == null)
+            effects = other.GetComponentInParent<PlayerBonusEffects>();
+
+        if (effects == null)
+            return;
+
+        effects.PlaySpeedEffect();
     }
 }

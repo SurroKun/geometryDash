@@ -20,17 +20,27 @@ public class JumpHeightPlatform : MonoBehaviour
         PlayerJumpHeightBonus bonus = other.GetComponent<PlayerJumpHeightBonus>();
 
         if (bonus == null)
-            bonus = other.GetComponentInParent<PlayerJumpHeightBonus>();
-
-        if (bonus == null)
             return;
 
+        bool wasBoosted = bonus.IsBoosted();
+
         if (mode == BonusPlatformMode.Toggle)
+        {
             bonus.ToggleJumpHeightBonus();
+        }
         else if (mode == BonusPlatformMode.ForceOn)
-            bonus.SetBoostStateFromPlatform(true);
+        {
+            bonus.SetBoostState(true);
+        }
         else if (mode == BonusPlatformMode.ForceOff)
-            bonus.SetBoostStateFromPlatform(false);
+        {
+            bonus.SetBoostState(false);
+        }
+
+        bool isBoosted = bonus.IsBoosted();
+
+        if (wasBoosted != isBoosted)
+            PlayPlayerJumpEffect(other);
     }
 
     public void ApplyRespawnState(PlayerJumpHeightBonus bonus)
@@ -39,5 +49,18 @@ public class JumpHeightPlatform : MonoBehaviour
             return;
 
         bonus.SetBoostState(boostedAfterRespawn);
+    }
+
+    private void PlayPlayerJumpEffect(Collider other)
+    {
+        PlayerBonusEffects effects = other.GetComponent<PlayerBonusEffects>();
+
+        if (effects == null)
+            effects = other.GetComponentInParent<PlayerBonusEffects>();
+
+        if (effects == null)
+            return;
+
+        effects.PlayJumpEffect();
     }
 }

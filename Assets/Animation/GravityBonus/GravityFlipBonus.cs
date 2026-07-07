@@ -41,17 +41,32 @@ public class GravityFlipBonus : MonoBehaviour
         if (gravityFlip == null)
             return;
 
+        if (!gravityFlip.CanTriggerGravity())
+            return;
+
+        bool wasInverted = gravityFlip.IsGravityInverted();
         bool success = false;
 
         if (mode == GravityPlatformMode.Toggle)
+        {
             success = gravityFlip.ToggleGravity();
+        }
         else if (mode == GravityPlatformMode.ForceInverted)
+        {
             success = gravityFlip.SetGravityStateFromPlatform(true);
+        }
         else if (mode == GravityPlatformMode.ForceNormal)
+        {
             success = gravityFlip.SetGravityStateFromPlatform(false);
+        }
 
         if (!success)
             return;
+
+        bool isInverted = gravityFlip.IsGravityInverted();
+
+        if (wasInverted != isInverted)
+            PlayPlayerGravityEffect(other);
 
         retriggerTimer = retriggerDelay;
     }
@@ -66,5 +81,18 @@ public class GravityFlipBonus : MonoBehaviour
             sideInputInvertedAfterRespawn,
             syncCameraAfterRespawn
         );
+    }
+
+    private void PlayPlayerGravityEffect(Collider other)
+    {
+        PlayerBonusEffects effects = other.GetComponent<PlayerBonusEffects>();
+
+        if (effects == null)
+            effects = other.GetComponentInParent<PlayerBonusEffects>();
+
+        if (effects == null)
+            return;
+
+        effects.PlayGravityEffect();
     }
 }
