@@ -11,6 +11,12 @@ public class LevelData
     public string sceneName;
     public bool unlocked = true;
 
+    [Header("Unlock")]
+    public int premiumUnlockCost = 3;
+
+    [Header("Map Coins")]
+    public int totalBaseCoinsOnMap = 0;
+
     [Header("Preview Scene Objects")]
     public GameObject previewRoot;
     public Transform previewStart;
@@ -28,6 +34,10 @@ public class LevelSelectManager : MonoBehaviour
     public TMP_Text levelNameText;
     public TMP_Text levelCountText;
     public TMP_Text lockText;
+    public TMP_Text playButtonText;
+    public TMP_Text availableBaseCoinsText;
+    public TMP_Text availablePremiumCoinsText;
+    public CurrencyDisplay currencyDisplay;
 
     public Button playButton;
     public Button leftButton;
@@ -38,6 +48,8 @@ public class LevelSelectManager : MonoBehaviour
 
     [Header("Debug")]
     public bool resetProgressOnStart = false;
+    public bool unlockAllForTesting = false;
+    public int defaultUnlockedLevels = 6;
 
     void Start()
     {
@@ -53,6 +65,8 @@ public class LevelSelectManager : MonoBehaviour
             Debug.Log("Progress reset from inspector");
         }
 
+        GameProgress.defaultUnlockedLevels = defaultUnlockedLevels;
+        GameProgress.UnlockAllContent = unlockAllForTesting;
         ApplySavedProgress();
 
         currentLevelIndex = Mathf.Clamp(currentLevelIndex, 0, levels.Length - 1);
@@ -63,7 +77,7 @@ public class LevelSelectManager : MonoBehaviour
     {
         for (int i = 0; i < levels.Length; i++)
         {
-            levels[i].unlocked = true;
+            levels[i].unlocked = GameProgress.IsLevelUnlocked(i);
         }
     }
 
@@ -100,8 +114,17 @@ public class LevelSelectManager : MonoBehaviour
 
         if (!level.unlocked)
         {
-            Debug.Log("Level is locked.");
-            return;
+            bool bought = GameProgress.BuyLevel(currentLevelIndex, level.premiumUnlockCost);
+
+            if (!bought)
+            {
+                Debug.Log("Not enough premium coins to unlock level.");
+                RefreshUI();
+                return;
+            }
+
+            level.unlocked = true;
+            RefreshUI();
         }
 
         if (string.IsNullOrEmpty(level.sceneName))
@@ -146,10 +169,26 @@ public class LevelSelectManager : MonoBehaviour
             levelCountText.text = (currentLevelIndex + 1) + " / " + levels.Length;
 
         if (lockText != null)
+        {
             lockText.gameObject.SetActive(!level.unlocked);
+            lockText.text = "LOCKED: " + level.premiumUnlockCost;
+        }
+
+        if (playButtonText != null)
+            playButtonText.text = level.unlocked ? "PLAY" : "UNLOCK " + level.premiumUnlockCost;
+
+        if (availableBaseCoinsText != null)
+            availableBaseCoinsText.text = GameProgress
+                .GetLevelAvailableBaseCoins(currentLevelIndex, level.totalBaseCoinsOnMap)
+                .ToString();
+
+        if (availablePremiumCoinsText != null)
+            availablePremiumCoinsText.text = GameProgress
+                .GetLevelAvailablePremiumCoins(currentLevelIndex)
+                .ToString();
 
         if (playButton != null)
-            playButton.interactable = level.unlocked;
+            playButton.interactable = level.unlocked || GameProgress.PremiumCoins >= level.premiumUnlockCost;
 
         if (leftButton != null)
             leftButton.interactable = currentLevelIndex > 0;
@@ -158,6 +197,9 @@ public class LevelSelectManager : MonoBehaviour
             rightButton.interactable = currentLevelIndex < levels.Length - 1;
 
         UpdatePreview();
+
+        if (currencyDisplay != null)
+            currencyDisplay.Refresh();
     }
 
     void UpdatePreview()

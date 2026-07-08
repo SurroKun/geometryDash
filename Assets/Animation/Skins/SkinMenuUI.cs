@@ -6,8 +6,13 @@ public class SkinMenuUI : MonoBehaviour
 
     public void SelectSkin(int index)
     {
-        PlayerPrefs.SetInt(SkinKey, index);
-        PlayerPrefs.Save();
+        if (!GameProgress.IsSkinUnlocked(index))
+        {
+            Debug.Log("Skin is locked: " + index);
+            return;
+        }
+
+        GameProgress.SelectSkin(index);
 
         Debug.Log("Skin selected: " + index);
     }

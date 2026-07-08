@@ -9,6 +9,11 @@ public class LevelFinish : MonoBehaviour
     [Header("Build Index Settings")]
     public int firstLevelBuildIndex = 2; // у тебя lvl1 начинается с 2
 
+    public int levelCount = 16;
+
+    [Header("Practice Testing")]
+    public bool completeCurrencyInPracticeMode = false;
+
     private bool finished = false;
 
     private void OnTriggerEnter(Collider other)
@@ -23,6 +28,9 @@ public class LevelFinish : MonoBehaviour
 
         if (DeathMenuUI.PracticeModeActive)
         {
+            if (completeCurrencyInPracticeMode || GameProgress.CompleteCurrencyInPracticeMode)
+                CompleteCurrencyProgress();
+
             DeathMenuUI.DisablePracticeMode();
 
             DeathMenuUI menu = FindFirstObjectByType<DeathMenuUI>();
@@ -33,9 +41,27 @@ public class LevelFinish : MonoBehaviour
         }
         else
         {
+            CompleteCurrencyProgress();
             UnlockNextLevel();
             Time.timeScale = 1f;
             SceneManager.LoadScene(levelSelectSceneName);
+        }
+    }
+
+    private void CompleteCurrencyProgress()
+    {
+        LevelIndexResolver.firstLevelBuildIndex = firstLevelBuildIndex;
+
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex - firstLevelBuildIndex;
+        RunCurrencyCollector collector = RunCurrencyCollector.Instance;
+
+        if (collector != null)
+            collector.CommitLevelComplete(currentLevelIndex, levelCount);
+        else
+        {
+            GameProgress.ResetBaseCoinsForLevel(currentLevelIndex);
+            GameProgress.ClearPremiumSpawnSelection(currentLevelIndex);
+            GameProgress.RestorePremiumCoinsOnOpenedLevels(levelCount, currentLevelIndex);
         }
     }
 

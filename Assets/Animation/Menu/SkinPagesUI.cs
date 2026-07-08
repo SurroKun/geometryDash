@@ -1,5 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
+[System.Serializable]
+public class SkinShopData
+{
+    public CurrencyType currencyType = CurrencyType.Base;
+    public int cost = 100;
+}
 
 public class SkinPagesUI : MonoBehaviour
 {
@@ -8,11 +16,17 @@ public class SkinPagesUI : MonoBehaviour
 
     [Header("18 visible slot images")]
     public Image[] slotImages;
+    public Image[] lockedOverlays;
 
     [Header("Buttons")]
     public Button leftButton;
     public Button rightButton;
     public Button equipButton;
+    public TMP_Text equipButtonText;
+
+    [Header("Shop")]
+    public SkinShopData[] skinShopData;
+    public CurrencyDisplay currencyDisplay;
 
     [Header("Page dots")]
     public Image[] pageDots;
@@ -71,6 +85,12 @@ public class SkinPagesUI : MonoBehaviour
             {
                 slotImages[i].enabled = true;
                 slotImages[i].sprite = skinIcons[skinIndex];
+                slotImages[i].color = GameProgress.IsSkinUnlocked(skinIndex)
+                    ? Color.white
+                    : new Color(0.45f, 0.45f, 0.45f, 1f);
+
+                if (lockedOverlays != null && i < lockedOverlays.Length && lockedOverlays[i] != null)
+                    lockedOverlays[i].gameObject.SetActive(!GameProgress.IsSkinUnlocked(skinIndex));
 
                 if (slotButton != null)
                 {
@@ -86,6 +106,9 @@ public class SkinPagesUI : MonoBehaviour
             else
             {
                 slotImages[i].enabled = false;
+
+                if (lockedOverlays != null && i < lockedOverlays.Length && lockedOverlays[i] != null)
+                    lockedOverlays[i].gameObject.SetActive(false);
 
                 if (slotButton != null)
                     slotButton.onClick.RemoveAllListeners();
@@ -104,14 +127,32 @@ public class SkinPagesUI : MonoBehaviour
             previewSkinSwitcher.ApplySkin(previewSkinIndex);
 
         Debug.Log("Preview skin: " + previewSkinIndex);
+        UpdateEquipButton();
     }
 
     private void EquipCurrentSkin()
     {
-        PlayerPrefs.SetInt(SkinKey, previewSkinIndex);
-        PlayerPrefs.Save();
+        if (!GameProgress.IsSkinUnlocked(previewSkinIndex))
+        {
+            SkinShopData data = GetSkinShopData(previewSkinIndex);
+            bool bought = GameProgress.BuySkin(previewSkinIndex, data.currencyType, data.cost);
+
+            if (!bought)
+            {
+                Debug.Log("Not enough currency for skin: " + previewSkinIndex);
+                UpdateEquipButton();
+                return;
+            }
+        }
+
+        GameProgress.SelectSkin(previewSkinIndex);
 
         Debug.Log("Equipped skin: " + previewSkinIndex);
+        ShowPage(currentPage);
+        UpdateEquipButton();
+
+        if (currencyDisplay != null)
+            currencyDisplay.Refresh();
     }
 
     private void UpdateButtons()
@@ -120,6 +161,7 @@ public class SkinPagesUI : MonoBehaviour
 
         leftButton.interactable = currentPage > 0;
         rightButton.interactable = currentPage < maxPage;
+        UpdateEquipButton();
     }
 
     private void UpdateDots()
@@ -128,5 +170,33 @@ public class SkinPagesUI : MonoBehaviour
         {
             pageDots[i].color = i == currentPage ? activeDotColor : inactiveDotColor;
         }
+    }
+
+    private void UpdateEquipButton()
+    {
+        if (equipButtonText == null)
+            return;
+
+        if (GameProgress.IsSkinUnlocked(previewSkinIndex))
+        {
+            int selectedSkin = PlayerPrefs.GetInt(SkinKey, 0);
+            equipButtonText.text = selectedSkin == previewSkinIndex ? "EQUIPPED" : "EQUIP";
+            return;
+        }
+
+        SkinShopData data = GetSkinShopData(previewSkinIndex);
+        string currencyName = data.currencyType == CurrencyType.Premium ? "P" : "B";
+        equipButtonText.text = "BUY " + data.cost + " " + currencyName;
+    }
+
+    private SkinShopData GetSkinShopData(int skinIndex)
+    {
+        if (skinShopData != null && skinIndex >= 0 && skinIndex < skinShopData.Length && skinShopData[skinIndex] != null)
+            return skinShopData[skinIndex];
+
+        SkinShopData fallback = new SkinShopData();
+        fallback.currencyType = CurrencyType.Base;
+        fallback.cost = 100;
+        return fallback;
     }
 }

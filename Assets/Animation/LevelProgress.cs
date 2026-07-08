@@ -6,18 +6,12 @@ public static class LevelProgress
 
     public static int GetUnlockedLevelIndex()
     {
-        return PlayerPrefs.GetInt(UnlockedLevelKey, 0);
+        return PlayerPrefs.GetInt(UnlockedLevelKey, GameProgress.defaultUnlockedLevels - 1);
     }
 
     public static void UnlockLevel(int levelIndex)
     {
-        int currentUnlocked = GetUnlockedLevelIndex();
-
-        if (levelIndex > currentUnlocked)
-        {
-            PlayerPrefs.SetInt(UnlockedLevelKey, levelIndex);
-            PlayerPrefs.Save();
-        }
+        GameProgress.UnlockLevel(levelIndex);
     }
 
     public static void ResetProgress()
